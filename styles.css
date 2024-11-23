@@ -1,0 +1,58 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    color: #333;
+    background-color: #f9f9f9;
+}
+
+/* Header Styles */
+header {
+    background-color: #0044cc;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    font-size: 1.5rem;
+}
+
+/* Navigation Bar Styles */
+nav {
+    background-color: #ddd;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+nav a {
+    text-decoration: none;
+    color: #0044cc;
+    font-weight: bold;
+    padding: 0.5rem;
+}
+
+nav a:hover {
+    background-color: #0044cc;
+    color: white;
+    border-radius: 4px;
+}
+
+/* Iframe Styles */
+iframe {
+    width: 100%;
+    margin: 1rem 0;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #0044cc;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 1rem;
+}
