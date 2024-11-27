@@ -6,6 +6,73 @@
     <title>Volunteer Hours Tracker</title>
 </head>
 <body>
-    
-</body>
+    <header id="header">
+      <h1>Volunteer Hours Tracker</h1>
+    </header>
+
+    <nav id="navbar">
+      <a href="index.html#donation-tracker">Donation Tracker</a>
+      <a href="index.html#volunteer-hours">Volunteer Hours Tracker</a>
+      <a href="index.html#event-signup">Event Signup</a>
+    </nav>
+
+    <main class="container">
+      <section id="volunteer-form-section">
+        <h2>Log Your Volunteer Hours</h2>
+        <form id="volunteer-form">
+          <div class="form-group">
+            <label for="charity-name">Charity Name:</label>
+            <input
+              type="text"
+              id="charity-name"
+              name="charity-name"
+              placeholder="Enter charity name"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="hours-volunteered">Hours Volunteered:</label>
+            <input
+              type="number"
+              id="hours-volunteered"
+              name="hours-volunteered"
+              placeholder="Enter hours volunteered"
+              min="1"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="date-volunteered">Date:</label>
+            <input
+              type="date"
+              id="date-volunteered"
+              name="date-volunteered"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="experience-rating"
+              >Volunteer Experience Rating (1-5):</label
+            >
+            <input
+              type="number"
+              id="experience-rating"
+              name="experience-rating"
+              placeholder="Rate your experience"
+              min="1"
+              max="5"
+              required
+            />
+          </div>
+          <button type="submit" class="btn-primary">Submit</button>
+        </form>
+      </section>
+    </main>
+
+    <footer id="footer">
+      <p>&copy; 2024 PiXELL River Financial</p>
+    </footer>
+
+    <script src="volunteer.js"></script>
+  </body>
 </html>
