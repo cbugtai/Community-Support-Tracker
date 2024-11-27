@@ -1,0 +1,74 @@
+.content{
+    padding: 10px;
+}
+
+#donation-form{
+    max-width: 40%;
+    margin: auto;
+    box-shadow: 6px 5px 5px rgba(0, 0, 0, 0.1);
+    border: 1px outset #ccc;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+#name-input{
+    width: 100%;
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.grid-container{
+    display: grid;
+    width: 100%;
+    column-gap: 10px;
+    grid-template-columns: auto auto;
+    align-items: center;
+}
+
+#amount-input, #date-input{
+    width: 100%;
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    text-align: right;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#amount-input::-webkit-outer-spin-button,
+#amount-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#message-input{
+    width: 100%;
+    height: 100px;
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+#submit {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#submit:hover {
+    background-color: #45a049;
+    }
+
