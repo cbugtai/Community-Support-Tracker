@@ -43,7 +43,11 @@ async function validateAmountInput(){
     let isAmountValid = false;
 
     if (amountInput.value.trim() != ""){
-        isAmountValid = true;
+        if(amountInput.value > 0){
+            isAmountValid = true;
+        } else{
+            showInputError(amountInput, "*Amount cannot be negative")
+        }
     } else{
         showInputError(amountInput, "*Amount cannot be blank")
     }
@@ -54,7 +58,7 @@ async function validateAmountInput(){
 async function validateDateInput(){
     const dateInput = document.getElementById("date-input");
     let isDateValid = false;
-
+    
     if (dateInput.value.trim() != ""){
         isDateValid = true;
     } else{
