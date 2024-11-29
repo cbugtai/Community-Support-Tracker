@@ -4,6 +4,7 @@ function init(){
     form.addEventListener("submit", onSubmit);
 }
 
+// Function that runs when form submits
 async function onSubmit(event){
     //Form Inputs
     const nameInput = document.getElementById("name-input");
@@ -18,14 +19,19 @@ async function onSubmit(event){
     let amountValid = await  validateAmountInput(amountInput);
     let dateValid = await validateDateInput(dateInput);
 
+    //Checks if all validations return true
     if (nameValid && amountValid && dateValid){
         collectData(nameInput.value, amountInput.value, dateInput.value, messageInput.value)
     }
 }
 
+// Function to Validate Charity Name input
+// takes an input element as an argument
+// returns true if input is valid false if invalid
 async function validateNameInput(nameInput){
     let isNameValid = false;
 
+    // checks if input value is not blank
     if (nameInput.value.trim() != ""){
         isNameValid = true;
     } else{
@@ -39,10 +45,16 @@ async function validateNameInput(nameInput){
     return isNameValid
 }
 
+// Function to Validate Donation Amount input
+// takes an input element as an argument
+// negative values equal to invalid input
+// returns true if input is valid false if invalid
 async function validateAmountInput(amountInput){
     let isAmountValid = false;
 
+    // checks if input value is not blank
     if (amountInput.value.trim() != ""){
+        // checks if input value is not negative
         if(amountInput.value > 0){
             isAmountValid = true;
         } else{
@@ -63,9 +75,13 @@ async function validateAmountInput(amountInput){
     return isAmountValid
 }
 
+// Function to Validate Date of Donation input
+// takes an input element as an argument
+// returns true if input is valid false if invalid
 async function validateDateInput(dateInput){
     let isDateValid = false;
     
+    // checks if input value is not blank
     if (dateInput.value.trim() != ""){
         isDateValid = true;
     } else{
@@ -78,6 +94,9 @@ async function validateDateInput(dateInput){
     return isDateValid
 }
 
+// Function that informs the user if theres any input error on the form
+// Takes an element and a string message as the arguments
+// appends a span element to the Element argument with the message argument as innerText 
 function showInputError(inputElement, message){
 
     const errorDisplay = document.createElement("span");
@@ -88,6 +107,7 @@ function showInputError(inputElement, message){
     inputElement.parentElement.appendChild(errorDisplay);
 }
 
+//Scours the document for any elements with the error-message class and removes them
 async function clearErrorMessages(){
     let errorMessages = Array.from(document.getElementsByClassName("error-message"));
     errorMessages.forEach(element => {
@@ -95,16 +115,18 @@ async function clearErrorMessages(){
     });
 }
 
+//Saves the form input data into a temporary object
 function collectData(name, amount, date, message = ""){
     let formData = {};
     formData["Charity Name"] = name
     formData["Donation Amount"] = amount
     formData["Donation Date"] = date
     formData["Donation Message"] = message
-    console.log(formData)
+    
     return formData;
 }
 
+// Exports the module snecessary when running tests
 if (typeof window !== "undefined"){
     window.onload = init;
 } else {
