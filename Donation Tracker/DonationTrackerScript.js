@@ -4,6 +4,7 @@ const form = document.getElementById("donation-form");
 // Submit Event
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    await clearErrorMessages()
     let isFormValid = await validateForm();
     if (isFormValid){
         console.log("Form is submitted")
@@ -31,7 +32,7 @@ async function validateNameInput(){
     if (nameInput.value.trim() != ""){
         isNameValid = true;
     } else{
-        console.log("Name cannot be blank")
+        showInputError(nameInput, "*Name cannot be blank")
     }
 
     return isNameValid
@@ -44,7 +45,7 @@ async function validateAmountInput(){
     if (amountInput.value.trim() != ""){
         isAmountValid = true;
     } else{
-        console.log("Amount cannot be blank")
+        showInputError(amountInput, "*Amount cannot be blank")
     }
 
     return isAmountValid
@@ -57,8 +58,25 @@ async function validateDateInput(){
     if (dateInput.value.trim() != ""){
         isDateValid = true;
     } else{
-        console.log("Date cannot be blank")
+        showInputError(dateInput, "*Date cannot be blank")
     }
 
     return isDateValid
+}
+
+function showInputError(inputElement, message){
+
+    const errorDisplay = document.createElement("span");
+    errorDisplay.innerText = message;
+    errorDisplay.className = "error-message";
+    errorDisplay.setAttribute("role", "alert")
+
+    inputElement.parentElement.appendChild(errorDisplay);
+}
+
+async function clearErrorMessages(){
+    let errorMessages = Array.from(document.getElementsByClassName("error-message"));
+    errorMessages.forEach(element => {
+        element.remove()
+    });
 }
