@@ -10,29 +10,18 @@ function init(){
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
         await clearErrorMessages()
-        let isFormValid = await validateForm();
-        if (isFormValid){
+
+        let nameValid = await validateNameInput(nameInput);
+        let amountValid = await  validateAmountInput(amountInput);
+        let dateValid = await validateDateInput(dateInput);
+
+        if (nameValid && amountValid && dateValid){
             collectData(nameInput.value, amountInput.value, dateInput.value, messageInput.value)
         }
     })
 }
 
-async function validateForm(){
-    let isFormValid = false;
-
-    let nameInput = await validateNameInput();
-    let amountInput = await  validateAmountInput();
-    let dateInput = await validateDateInput();
-
-    if(nameInput && amountInput && dateInput){
-        isFormValid = true
-    }
-
-    return isFormValid;
-}
-
-async function validateNameInput(){
-    const nameInput = document.getElementById("name-input");
+async function validateNameInput(nameInput){
     let isNameValid = false;
 
     if (nameInput.value.trim() != ""){
@@ -44,8 +33,7 @@ async function validateNameInput(){
     return isNameValid
 }
 
-async function validateAmountInput(){
-    const amountInput = document.getElementById("amount-input");
+async function validateAmountInput(amountInput){
     let isAmountValid = false;
 
     if (amountInput.value.trim() != ""){
@@ -61,8 +49,7 @@ async function validateAmountInput(){
     return isAmountValid
 }
 
-async function validateDateInput(){
-    const dateInput = document.getElementById("date-input");
+async function validateDateInput(dateInput){
     let isDateValid = false;
     
     if (dateInput.value.trim() != ""){
