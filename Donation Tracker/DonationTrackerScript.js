@@ -44,10 +44,18 @@ async function validateAmountInput(amountInput){
         if(amountInput.value > 0){
             isAmountValid = true;
         } else{
-            showInputError(amountInput, "*Amount cannot be negative")
+            try{
+                showInputError(amountInput, "*Amount cannot be negative")
+            } catch {
+                isAmountValid = false;
+            }
         }
     } else{
-        showInputError(amountInput, "*Amount cannot be blank")
+        try{
+            showInputError(amountInput, "*Amount cannot be blank")
+        } catch {
+            isAmountValid = false;
+        }
     }
 
     return isAmountValid

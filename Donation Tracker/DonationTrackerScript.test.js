@@ -5,8 +5,7 @@ const { validateNameInput } = require("./DonationTrackerScript");
 const { validateAmountInput } = require("./DonationTrackerScript");
 const { validateDateInput } = require("./DonationTrackerScript");
 
-
-
+// Testing From Submission
 test("testing form submission", () => {
     // Here I am creating a new form and submit button
     const dom = new JSDOM(`
@@ -14,10 +13,8 @@ test("testing form submission", () => {
         <button type="submit">Submit</button>
     </form>
     `);
-
     // This creates a local DOM in my test
     const document = dom.window.document;
-
     // I get the form from my JSDOM code
     const form = document.querySelector("#test-form");
     // Jest allows you to spy on things like functions
@@ -51,6 +48,38 @@ test("testing validateNameInput() valid name input", async () => {
     const nameInput = document.getElementById("name-input");
 
     expect(await validateNameInput(nameInput)).toBe(true)
+})
+
+
+// Testing validateAmountInput() Function
+test("testing validateAmountInput() blank amount input", async () => {
+    const mockDom = new JSDOM(`
+        <input type="number" id="input" value="">
+        `);
+    const document = mockDom.window.document;
+    const input = document.getElementById("input");
+
+    expect(await validateAmountInput(input)).toBe(false)
+})
+
+test("testing validateAmountInput() negative amount value", async () => {
+    const mockDom = new JSDOM(`
+        <input type="number" id="input" value="-1000">
+        `);
+    const document = mockDom.window.document;
+    const input = document.getElementById("input");
+
+    expect(await validateAmountInput(input)).toBe(false)
+})
+
+test("testing validateAmountInput() valid amount input", async () => {
+    const mockDom = new JSDOM(`
+        <input type="number" id="input" value="100.00">
+        `);
+    const document = mockDom.window.document;
+    const input = document.getElementById("input");
+
+    expect(await validateAmountInput(input)).toBe(true)
 })
 
 
