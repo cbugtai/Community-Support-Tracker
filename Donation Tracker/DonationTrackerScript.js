@@ -67,7 +67,11 @@ async function validateDateInput(dateInput){
     if (dateInput.value.trim() != ""){
         isDateValid = true;
     } else{
-        showInputError(dateInput, "*Date cannot be blank")
+        try{
+            showInputError(dateInput, "*Date cannot be blank")
+        } catch {
+            isDateValid = false
+        }
     }
     return isDateValid
 }

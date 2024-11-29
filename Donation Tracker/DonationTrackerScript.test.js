@@ -28,8 +28,8 @@ test("testing form submission", () => {
     expect(handleSubmitSpy).toHaveBeenCalled();
 });
 
-
 // Testing validateNameInput() Function
+// blank input test
 test("testing validateNameInput() blank name input", async () => {
     const mockDom = new JSDOM(`
         <input type="text" id="name-input" value="">
@@ -39,7 +39,7 @@ test("testing validateNameInput() blank name input", async () => {
 
     expect(await validateNameInput(nameInput)).toBe(false)
 })
-
+// valid input test
 test("testing validateNameInput() valid name input", async () => {
     const mockDom = new JSDOM(`
         <input type="text" id="name-input" value="Test Name">
@@ -50,8 +50,8 @@ test("testing validateNameInput() valid name input", async () => {
     expect(await validateNameInput(nameInput)).toBe(true)
 })
 
-
 // Testing validateAmountInput() Function
+// blank input test
 test("testing validateAmountInput() blank amount input", async () => {
     const mockDom = new JSDOM(`
         <input type="number" id="input" value="">
@@ -61,7 +61,7 @@ test("testing validateAmountInput() blank amount input", async () => {
 
     expect(await validateAmountInput(input)).toBe(false)
 })
-
+// negative input amount test
 test("testing validateAmountInput() negative amount value", async () => {
     const mockDom = new JSDOM(`
         <input type="number" id="input" value="-1000">
@@ -71,7 +71,7 @@ test("testing validateAmountInput() negative amount value", async () => {
 
     expect(await validateAmountInput(input)).toBe(false)
 })
-
+// valid input test
 test("testing validateAmountInput() valid amount input", async () => {
     const mockDom = new JSDOM(`
         <input type="number" id="input" value="100.00">
@@ -80,6 +80,29 @@ test("testing validateAmountInput() valid amount input", async () => {
     const input = document.getElementById("input");
 
     expect(await validateAmountInput(input)).toBe(true)
+})
+
+
+// Testing validateDateInput() Function
+// blank input test
+test("testing validateDateInput() blank date input", async () => {
+    const mockDom = new JSDOM(`
+        <input type="date" id="input" value="">
+        `);
+    const document = mockDom.window.document;
+    const input = document.getElementById("input");
+
+    expect(await validateDateInput(input)).toBe(false)
+})
+// valid input test
+test("testing validateDateInput() blank date input", async () => {
+    const mockDom = new JSDOM(`
+        <input type="date" id="input" value="2024-11-29">
+        `);
+    const document = mockDom.window.document;
+    const input = document.getElementById("input");
+
+    expect(await validateDateInput(input)).toBe(true)
 })
 
 
