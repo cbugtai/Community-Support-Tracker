@@ -1,24 +1,22 @@
-
 function init() {
+  // Attach Submit Event to the form
   const form = document.getElementById("volunteer-form");
   form.addEventListener("submit", onSubmit);
 }
 
 /**
- * Function that handles form submission.
+ * Handles the form submission.
  * Validates inputs and collects form data.
  */
-async function onSubmit(event){
-// Form Inputs
-const form = document.getElementById("volunteer-form");
-const charityInput = document.getElementById("charity-name");
-const hoursInput = document.getElementById("hours-volunteered");
-const dateInput = document.getElementById("date-volunteered");
-const ratingInput = document.getElementById("experience-rating");
+async function onSubmit(event) {
+  // Form Inputs
+  const charityInput = document.getElementById("charity-name");
+  const hoursInput = document.getElementById("hours-volunteered");
+  const dateInput = document.getElementById("date-volunteered");
+  const ratingInput = document.getElementById("experience-rating");
 
-
-event.preventDefault();
-  await clearErrorMessages(); 
+  event.preventDefault();
+  await clearErrorMessages();
 
   // Validate all inputs
   const charityValid = await validateCharityInput(charityInput);
@@ -34,119 +32,119 @@ event.preventDefault();
       dateInput.value,
       ratingInput.value
     );
+
     console.log("Form Submitted Successfully:", formData);
   }
 }
-
-/* 
-form.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  await clearErrorMessages();
-  let isFormValid = await validateForm();
-  if (isFormValid) {
-      collectData(
-          charityNameInput.value,
-          hoursInput.value,
-          dateInput.value,
-          ratingInput.value
-      );
-  }
-});
-*/
-
-/**
- * Validates the Charity Name input.
- * @param {HTMLInputElement} charityInput - Input field for charity name.
- * @returns {boolean} - True if valid, false otherwise.
- 
-
-async function validateForm() {
-  let isFormValid = false;
-
-  const charityNameValid = await validateCharityNameInput();
-  const hoursValid = await validateHoursInput();
-  const dateValid = await validateDateInput();
-  const ratingValid = await validateRatingInput();
-
-  if (charityNameValid && hoursValid && dateValid && ratingValid) {
-      isFormValid = true;
-  }
-
-  return isFormValid;
-}
-*/
-
 
 /**
  * Validates the Charity Name input.
  * @param {HTMLInputElement} charityInput - Input field for charity name.
  * @returns {boolean} - True if valid, false otherwise.
  */
-
-async function validateCharityInput() {
+async function validateCharityInput(charityInput) {
   let isValid = false;
 
   if (charityInput.value.trim() !== "") {
-      isValid = true;
+    isValid = true;
   } else {
     try {
       showInputError(charityInput, "*Charity Name cannot be blank");
     } catch {
-    isValid = false
+      isValid = false;
     }
   }
 
-  return isCharityNameValid;
+  return isValid;
 }
 
-
-async function validateHoursInput() {
-  let isHoursValid = false;
+/**
+ * Validates the Hours Volunteered input.
+ * Ensures value is a positive number.
+ * @param {HTMLInputElement} hoursInput - Input field for hours volunteered.
+ * @returns {boolean} - True if valid, false otherwise.
+ */
+async function validateHoursInput(hoursInput) {
+  let isValid = false;
 
   if (hoursInput.value.trim() !== "") {
-      if (hoursInput.value > 0) {
-          isHoursValid = true;
-      } else {
-          showInputError(hoursInput, "*Hours must be greater than 0");
+    if (hoursInput.value > 0) {
+      isValid = true;
+    } else {
+      try {
+        showInputError(hoursInput, "*Hours must be greater than 0");
+      } catch {
+        isValid = false;
       }
+    }
   } else {
+    try {
       showInputError(hoursInput, "*Hours cannot be blank");
+    } catch {
+      isValid = false;
+    }
   }
 
-  return isHoursValid;
+  return isValid;
 }
 
-
-async function validateDateInput() {
-  let isDateValid = false;
+/**
+ * Validates the Date input.
+ * @param {HTMLInputElement} dateInput - Input field for date volunteered.
+ * @returns {boolean} - True if valid, false otherwise.
+ */
+async function validateDateInput(dateInput) {
+  let isValid = false;
 
   if (dateInput.value.trim() !== "") {
-      isDateValid = true;
+    isValid = true;
   } else {
+    try {
       showInputError(dateInput, "*Date cannot be blank");
+    } catch {
+      isValid = false;
+    }
   }
 
-  return isDateValid;
+  return isValid;
 }
 
-
-async function validateRatingInput() {
-  let isRatingValid = false;
+/**
+ * Validates the Experience Rating input.
+ * Ensures the value is between 1 and 5.
+ * @param {HTMLInputElement} ratingInput - Input field for experience rating.
+ * @returns {boolean} - True if valid, false otherwise.
+ */
+async function validateRatingInput(ratingInput) {
+  let isValid = false;
 
   if (ratingInput.value.trim() !== "") {
-      const rating = Number(ratingInput.value);
-      if (rating >= 1 && rating <= 5) {
-          isRatingValid = true;
-      } else {
-          showInputError(ratingInput, "*Rating must be between 1 and 5");
+    const rating = Number(ratingInput.value);
+    if (rating >= 1 && rating <= 5) {
+      isValid = true;
+    } else {
+      try {
+        showInputError(ratingInput, "*Rating must be between 1 and 5");
+      } catch {
+        isValid = false;
       }
+    }
   } else {
+    try {
       showInputError(ratingInput, "*Rating cannot be blank");
+    } catch {
+      isValid = false;
+    }
   }
 
-  return isRatingValid;
+  return isValid;
 }
 
+/**
+ * Displays an error message for an invalid input field.
+ * @param {HTMLInputElement} inputElement - The input field with an error.
+ * @param {string} message - The error message to display.
+ */
 function showInputError(inputElement, message) {
   const errorDisplay = document.createElement("span");
   errorDisplay.innerText = message;
@@ -156,22 +154,48 @@ function showInputError(inputElement, message) {
   inputElement.parentElement.appendChild(errorDisplay);
 }
 
+/**
+ * Clears all existing error messages from the form.
+ */
 async function clearErrorMessages() {
-  let errorMessages = Array.from(document.getElementsByClassName("error-message"));
+  const errorMessages = Array.from(
+    document.getElementsByClassName("error-message")
+  );
   errorMessages.forEach((element) => {
-      element.remove();
+    element.remove();
   });
 }
 
+/**
+ * Collects validated form data into a temporary object.
+ * @param {string} charityName - The name of the charity.
+ * @param {string} hours - The number of hours volunteered.
+ * @param {string} date - The date of volunteering.
+ * @param {string} rating - The experience rating.
+ * @returns {object} - Object containing the form data.
+ */
 function collectData(charityName, hours, date, rating) {
-  let formData = {
-      "Charity Name": charityName,
-      "Hours Volunteered": hours,
-      "Date Volunteered": date,
-      "Experience Rating": rating,
+  const formData = {
+    "Charity Name": charityName,
+    "Hours Volunteered": hours,
+    "Date Volunteered": date,
+    "Experience Rating": rating,
   };
 
-  console.log("Form Submitted Successfully:", formData);
+  return formData;
 }
 
-
+// Initialize on window load
+if (typeof window !== "undefined") {
+  window.onload = init;
+} else {
+  module.exports = {
+    init,
+    collectData,
+    validateCharityInput,
+    validateHoursInput,
+    validateDateInput,
+    validateRatingInput,
+    showInputError,
+  };
+}
