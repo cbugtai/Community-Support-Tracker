@@ -82,7 +82,6 @@ test("testing validateAmountInput() valid amount input", async () => {
     expect(await validateAmountInput(input)).toBe(true)
 })
 
-
 // Testing validateDateInput() Function
 // blank input test
 test("testing validateDateInput() blank date input", async () => {
@@ -105,9 +104,8 @@ test("testing validateDateInput() blank date input", async () => {
     expect(await validateDateInput(input)).toBe(true)
 })
 
-
 // test for the collectData fuction for if it populates the formData object properly
-test("collectData saves data passed into it in a dictionary", () => {
+test("testing collectData() saves data passed into it in a dictionary", () => {
     expect(collectData("testName", 100.00, 2024-11-28)).toStrictEqual({
         "Charity Name": 'testName', 
         "Donation Amount": 100.00, 

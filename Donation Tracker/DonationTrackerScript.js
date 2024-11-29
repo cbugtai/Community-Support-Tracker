@@ -1,24 +1,26 @@
 function init(){
-    // Variables
+    // Submit Event
     const form = document.getElementById("donation-form");
+    form.addEventListener("submit", onSubmit);
+}
+
+async function onSubmit(event){
+    //Form Inputs
     const nameInput = document.getElementById("name-input");
     const amountInput = document.getElementById("amount-input");
     const dateInput = document.getElementById("date-input");
     const messageInput = document.getElementById("message-input")
 
-    // Submit Event
-    form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        await clearErrorMessages()
+    event.preventDefault();
+    await clearErrorMessages()
 
-        let nameValid = await validateNameInput(nameInput);
-        let amountValid = await  validateAmountInput(amountInput);
-        let dateValid = await validateDateInput(dateInput);
+    let nameValid = await validateNameInput(nameInput);
+    let amountValid = await  validateAmountInput(amountInput);
+    let dateValid = await validateDateInput(dateInput);
 
-        if (nameValid && amountValid && dateValid){
-            collectData(nameInput.value, amountInput.value, dateInput.value, messageInput.value)
-        }
-    })
+    if (nameValid && amountValid && dateValid){
+        collectData(nameInput.value, amountInput.value, dateInput.value, messageInput.value)
+    }
 }
 
 async function validateNameInput(nameInput){
@@ -99,14 +101,14 @@ function collectData(name, amount, date, message = ""){
     formData["Donation Amount"] = amount
     formData["Donation Date"] = date
     formData["Donation Message"] = message
-
+    console.log(formData)
     return formData;
 }
 
 if (typeof window !== "undefined"){
     window.onload = init;
 } else {
-    module.exports = { init,collectData, validateNameInput, validateAmountInput, validateDateInput, showInputError }
+    module.exports = { init, collectData, validateNameInput, validateAmountInput, validateDateInput, showInputError }
 }
 
 
