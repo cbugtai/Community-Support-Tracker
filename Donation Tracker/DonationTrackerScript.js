@@ -104,7 +104,7 @@ function collectData(name, amount, date, message = ""){
 if (typeof window !== "undefined"){
     window.onload = init;
 } else {
-    module.exports = { collectData, validateNameInput, validateAmountInput, validateDateInput }
+    module.exports = { init,collectData, validateNameInput, validateAmountInput, validateDateInput }
 }
 
 
