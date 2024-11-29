@@ -14,7 +14,6 @@
 #name-input{
     width: 100%;
     padding: 12px 20px;
-    margin-bottom: 10px;
     display: block;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -32,7 +31,7 @@
 #amount-input, #date-input{
     width: 100%;
     padding: 12px 20px;
-    margin-bottom: 10px;
+
     text-align: right;
     display: inline-block;
     border: 1px solid #ccc;
@@ -50,7 +49,6 @@
     width: 100%;
     height: 100px;
     padding: 12px 20px;
-    margin-bottom: 10px;
     display: block;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -72,3 +70,21 @@
     background-color: #45a049;
     }
 
+.error-message {
+    color: red;
+    font-style: italic;
+    font-size: x-small;
+    line-height: 0;
+}
+#charity-name,
+#donation-amount,
+#donation-date,
+#donor-message{
+    padding-bottom: 24px;
+}
+
+#charity-name:has(span),
+#donation-amount:has(span),
+#donation-date:has(span){
+    padding-bottom: 0px;
+}
