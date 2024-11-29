@@ -13,9 +13,9 @@
     </header>
 
     <nav id="navbar">
-      <a href="index.html#donation-tracker">Donation Tracker</a>
-      <a href="index.html#volunteer-hours">Volunteer Hours Tracker</a>
-      <a href="index.html#event-signup">Event Signup</a>
+      <a href="Donation Tracker/DonationTracker.html">Donation Tracker</a>
+      <a href="Volunteer Hours/VolunteerHours.html">Volunteer Hours Tracker</a>
+      <a href="Event Signup/EventSignup.html">Event Signup</a>
     </nav>
 
     <main class="container">
@@ -31,6 +31,13 @@
               placeholder="Enter charity name"
               required
             />
+            <span
+              id="charity-name-error"
+              class="error-message"
+              style="display: none"
+            >
+              Charity Name is required.
+            </span>
           </div>
           <div class="form-group">
             <label for="hours-volunteered">Hours Volunteered:</label>
@@ -42,6 +49,13 @@
               min="1"
               required
             />
+            <span
+              id="hours-volunteered-error"
+              class="error-message"
+              style="display: none"
+            >
+              Hours Volunteered must be greater than 0.
+            </span>
           </div>
           <div class="form-group">
             <label for="date-volunteered">Date:</label>
@@ -51,6 +65,13 @@
               name="date-volunteered"
               required
             />
+            <span
+              id="date-volunteered-error"
+              class="error-message"
+              style="display: none"
+            >
+              Please select a date.
+            </span>
           </div>
           <div class="form-group">
             <label for="experience-rating"
@@ -65,6 +86,13 @@
               max="5"
               required
             />
+            <span
+              id="experience-rating-error"
+              class="error-message"
+              style="display: none"
+            >
+              Rating must be between 1 and 5.
+            </span>
           </div>
           <button type="submit" class="btn-primary">Submit</button>
         </form>

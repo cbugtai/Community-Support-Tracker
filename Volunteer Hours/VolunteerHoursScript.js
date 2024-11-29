@@ -1,10 +1,44 @@
 
+function init() {
+  const form = document.getElementById("volunteer-form");
+  form.addEventListener("submit", onSubmit);
+}
+
+/**
+ * Function that handles form submission.
+ * Validates inputs and collects form data.
+ */
+async function onSubmit(event){
+// Form Inputs
 const form = document.getElementById("volunteer-form");
 const charityInput = document.getElementById("charity-name");
 const hoursInput = document.getElementById("hours-volunteered");
 const dateInput = document.getElementById("date-volunteered");
 const ratingInput = document.getElementById("experience-rating");
 
+
+event.preventDefault();
+  await clearErrorMessages(); 
+
+  // Validate all inputs
+  const charityValid = await validateCharityInput(charityInput);
+  const hoursValid = await validateHoursInput(hoursInput);
+  const dateValid = await validateDateInput(dateInput);
+  const ratingValid = await validateRatingInput(ratingInput);
+
+  // If all validations pass, collect and log form data
+  if (charityValid && hoursValid && dateValid && ratingValid) {
+    const formData = collectData(
+      charityInput.value,
+      hoursInput.value,
+      dateInput.value,
+      ratingInput.value
+    );
+    console.log("Form Submitted Successfully:", formData);
+  }
+}
+
+/* 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   await clearErrorMessages();
@@ -18,7 +52,13 @@ form.addEventListener("submit", async (event) => {
       );
   }
 });
+*/
 
+/**
+ * Validates the Charity Name input.
+ * @param {HTMLInputElement} charityInput - Input field for charity name.
+ * @returns {boolean} - True if valid, false otherwise.
+ 
 
 async function validateForm() {
   let isFormValid = false;
@@ -34,15 +74,26 @@ async function validateForm() {
 
   return isFormValid;
 }
+*/
 
 
-async function validateCharityNameInput() {
-  let isCharityNameValid = false;
+/**
+ * Validates the Charity Name input.
+ * @param {HTMLInputElement} charityInput - Input field for charity name.
+ * @returns {boolean} - True if valid, false otherwise.
+ */
 
-  if (charityNameInput.value.trim() !== "") {
-      isCharityNameValid = true;
+async function validateCharityInput() {
+  let isValid = false;
+
+  if (charityInput.value.trim() !== "") {
+      isValid = true;
   } else {
-      showInputError(charityNameInput, "*Charity Name cannot be blank");
+    try {
+      showInputError(charityInput, "*Charity Name cannot be blank");
+    } catch {
+    isValid = false
+    }
   }
 
   return isCharityNameValid;
