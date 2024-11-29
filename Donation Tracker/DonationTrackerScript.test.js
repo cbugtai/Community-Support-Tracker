@@ -1,6 +1,11 @@
 const { JSDOM } = require("jsdom");
 const { init } = require("./DonationTrackerScript");
 const { collectData }  = require("./DonationTrackerScript");
+const { validateNameInput } = require("./DonationTrackerScript");
+const { validateAmountInput } = require("./DonationTrackerScript");
+const { validateDateInput } = require("./DonationTrackerScript");
+
+
 
 test("testing form submission", () => {
     // Here I am creating a new form and submit button
@@ -25,6 +30,28 @@ test("testing form submission", () => {
     // Finally I check, was my funciton called?
     expect(handleSubmitSpy).toHaveBeenCalled();
 });
+
+
+// Testing validateNameInput() Function
+test("testing validateNameInput() blank name input", async () => {
+    const mockDom = new JSDOM(`
+        <input type="text" id="name-input" value="">
+        `);
+    const document = mockDom.window.document;
+    const nameInput = document.getElementById("name-input");
+
+    expect(await validateNameInput(nameInput)).toBe(false)
+})
+
+test("testing validateNameInput() valid name input", async () => {
+    const mockDom = new JSDOM(`
+        <input type="text" id="name-input" value="Test Name">
+        `);
+    const document = mockDom.window.document;
+    const nameInput = document.getElementById("name-input");
+
+    expect(await validateNameInput(nameInput)).toBe(true)
+})
 
 
 // test for the collectData fuction for if it populates the formData object properly

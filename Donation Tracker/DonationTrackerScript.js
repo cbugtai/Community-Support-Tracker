@@ -27,7 +27,11 @@ async function validateNameInput(nameInput){
     if (nameInput.value.trim() != ""){
         isNameValid = true;
     } else{
-        showInputError(nameInput, "*Name cannot be blank")
+        try{
+            showInputError(nameInput, "*Name cannot be blank")
+        } catch {
+            isNameValid = false;
+        }
     }
 
     return isNameValid
@@ -83,7 +87,6 @@ function collectData(name, amount, date, message = ""){
     formData["Donation Amount"] = amount
     formData["Donation Date"] = date
     formData["Donation Message"] = message
-    console.log(formData)
 
     return formData;
 }
@@ -91,7 +94,7 @@ function collectData(name, amount, date, message = ""){
 if (typeof window !== "undefined"){
     window.onload = init;
 } else {
-    module.exports = { init,collectData, validateNameInput, validateAmountInput, validateDateInput }
+    module.exports = { init,collectData, validateNameInput, validateAmountInput, validateDateInput, showInputError }
 }
 
 
