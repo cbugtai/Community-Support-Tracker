@@ -91,7 +91,7 @@ async function validateRatingInput(ratingInput) {
 }
 
 /**
- * Generic validation for input fields.
+ * validation for input fields.
  * @param {HTMLInputElement} inputElement - The input field to validate.
  * @param {string} errorMessage - The error message to display if invalid.
  * @returns {Promise<boolean>} - True if valid, false otherwise.
