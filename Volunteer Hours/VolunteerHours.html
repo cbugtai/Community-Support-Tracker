@@ -1,11 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Volunteer Hours Tracker</title>
-</head>
-<body>
-    
-</body>
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="./VolunteerHours.css" />
+  </head>
+  <body>
+    <header id="header">
+      <h1>Volunteer Hours Tracker</h1>
+    </header>
+
+    <nav id="navbar">
+      <a href="Donation Tracker/DonationTracker.html">Donation Tracker</a>
+      <a href="Volunteer Hours/VolunteerHours.html">Volunteer Hours Tracker</a>
+      <a href="Event Signup/EventSignup.html">Event Signup</a>
+    </nav>
+
+    <main class="container">
+      <section id="volunteer-form-section">
+        <h2>Log Your Volunteer Hours</h2>
+        <form id="volunteer-form">
+          <div class="form-group">
+            <label for="charity-name">Charity Name:</label>
+            <input
+              type="text"
+              id="charity-name"
+              name="charity-name"
+              placeholder="Enter charity name"
+              required
+            />
+            <span
+              id="charity-name-error"
+              class="error-message"
+              style="display: none"
+            >
+              Charity Name is required.
+            </span>
+          </div>
+          <div class="form-group">
+            <label for="hours-volunteered">Hours Volunteered:</label>
+            <input
+              type="number"
+              id="hours-volunteered"
+              name="hours-volunteered"
+              placeholder="Enter hours volunteered"
+              min="1"
+              required
+            />
+            <span
+              id="hours-volunteered-error"
+              class="error-message"
+              style="display: none"
+            >
+              Hours Volunteered must be greater than 0.
+            </span>
+          </div>
+          <div class="form-group">
+            <label for="date-volunteered">Date:</label>
+            <input
+              type="date"
+              id="date-volunteered"
+              name="date-volunteered"
+              required
+            />
+            <span
+              id="date-volunteered-error"
+              class="error-message"
+              style="display: none"
+            >
+              Please select a date.
+            </span>
+          </div>
+          <div class="form-group">
+            <label for="experience-rating"
+              >Volunteer Experience Rating (1-5):</label
+            >
+            <input
+              type="number"
+              id="experience-rating"
+              name="experience-rating"
+              placeholder="Rate your experience"
+              min="1"
+              max="5"
+              required
+            />
+            <span
+              id="experience-rating-error"
+              class="error-message"
+              style="display: none"
+            >
+              Rating must be between 1 and 5.
+            </span>
+          </div>
+          <button type="submit" class="btn-primary">Submit</button>
+        </form>
+      </section>
+    </main>
+
+    <footer id="footer">
+      <p>&copy; 2024 PiXELL River Financial</p>
+    </footer>
+
+    <script src="volunteer.js"></script>
+  </body>
 </html>
