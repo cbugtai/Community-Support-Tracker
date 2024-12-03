@@ -1,11 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Donation Tracker</title>
-</head>
-<body>
-    
-</body>
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="./DonationTracker.css">
+  </head>
+  <body>
+    <header id="header">Community Support Tracker</header>
+
+    <nav id="navbar">
+      <a href="Donation Tracker\DonationTracker.html">Donation Tracker</a>
+      <a href="Volunteer Hours\VolunteerHours.html">Volunteer Hours Tracker</a>
+      <a href="Event Signup\EventSignup.html">Event Signup</a>
+    </nav>
+
+    <section class="content">
+        <form id="donation-form">
+            <div id="charity-name">
+            <label for="Charity Name">Charity Name:</label>
+            <input type="text" name="Charity Name" maxlength="75" id="name-input">
+            </div>
+            
+            <div class="grid-container">
+                <div id="donation-amount">
+                  <label for="Donation Amount">Donation Amount:</label>
+                  <input type="number" name="Donation Amount" placeholder="$00.00" id="amount-input">
+                </div>
+                <div id="donation-date">
+                  <label for="Date of Donation">Date of Donation:</label>
+                  <input type="date" name="Date of Donation" id="date-input">
+                </div>
+            </div>
+            <div id="donor-message">
+            <label for="Donor Message">Donor Message:</label>
+            <textarea name="Donor Message" id="message-input"></textarea>
+            </div>
+
+            <input type="submit" value="Submit" id="submit">
+            
+        </form>
+    </section>
+
+    <footer id="footer">Footer</footer>
+    <script src="bundle.js"></script>
+  </body>
 </html>

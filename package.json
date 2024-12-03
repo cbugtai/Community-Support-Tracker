@@ -1,0 +1,24 @@
+{
+  "name": "community-support-tracker",
+  "version": "1.0.0",
+  "main": "DonationTrackerScript.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-junit": "^16.0.0",
+    "jsdom": "^25.0.1"
+  },
+
+  "jest": {
+    "reporters": [
+      "default",
+      ["jest-junit", { "outputDirectory": "test-results/jest" }]
+    ]
+  }
+}
