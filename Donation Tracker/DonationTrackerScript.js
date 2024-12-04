@@ -161,6 +161,7 @@ async function showHistory(){
         //creating the table
         const table = document.createElement("table")
         table.id = "donation-history"
+        table.className = "table"
         //Adding Headers
         let header = table.createTHead();
         let headerRow = header.insertRow(0);
@@ -206,7 +207,7 @@ function deleteRow(){
 
 }
 
-//localStorage.clear();
+localStorage.clear();
 
 // Exports the modules necessary when running tests
 if (typeof window !== "undefined"){
