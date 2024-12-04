@@ -9,7 +9,7 @@ document.getElementById('event-sign-up-form').addEventListener('submit',function
 
     //Validate inputs
     if(!eventName || !repName || !repEMail || !role){
-        alert('Pleae fill out all required fields.')
+        alert('Please fill out all required fields.')
         return;
     }
     // Validate e-mail.
