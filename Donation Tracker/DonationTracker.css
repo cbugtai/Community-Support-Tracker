@@ -93,6 +93,10 @@
     padding-bottom: 0px;
 }
 
+table, td {
+    border: 1px solid black;
+  }
+
 /* for mobile or tablet devices */
 @media (max-width: 900px){
     #donation-form{

@@ -165,15 +165,31 @@ async function showHistory(){
         let header = table.createTHead();
         let headerRow = header.insertRow(0);
         // header columns
-        let dateCell = headerRow.insertCell(0);
-        let nameCell = headerRow.insertCell(1);
-        let amountCell = headerRow.insertCell(2);
-        let messageCell = headerRow.insertCell(3);
+        let dateHeader = headerRow.insertCell(0);
+        let nameHeader = headerRow.insertCell(1);
+        let amountHeader = headerRow.insertCell(2);
+        let messageHeader = headerRow.insertCell(3);
         // header text
-        dateCell.innerHTML = "Date of Donation"
-        nameCell.innerHTML = "Charity Name"
-        amountCell.innerHTML = "Donation Amount"
-        messageCell.innerHTML = "Donor Message"
+        dateHeader.innerHTML = "Date of Donation"
+        nameHeader.innerHTML = "Charity Name"
+        amountHeader.innerHTML = "Donation Amount"
+        messageHeader.innerHTML = "Donor Message"
+
+        donationHistory.forEach(donation => {
+            let body = table.createTBody();
+            let bodyRow = body.insertRow(0);
+
+            let dateBody = bodyRow.insertCell(0);
+            let nameBody = bodyRow.insertCell(1);
+            let amountBody = bodyRow.insertCell(2);
+            let messageBody = bodyRow.insertCell(3);
+
+            dateBody.innerHTML = donation["Donation Date"]
+            nameBody.innerHTML = donation["Charity Name"]
+            amountBody.innerHTML = donation["Donation Amount"]
+            messageBody.innerHTML = donation["Donation Message"]
+
+        })
         
         document.getElementById("donation-history").replaceWith(table)
     } 
@@ -185,7 +201,7 @@ function deleteRow(){
 
 }
 
-localStorage.clear();
+//localStorage.clear();
 
 // Exports the module snecessary when running tests
 if (typeof window !== "undefined"){
