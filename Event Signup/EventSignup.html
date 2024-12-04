@@ -4,8 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Signup</title>
+    <link rel = "stylesheet" href="styles_event.css">
 </head>
 <body>
-    
+    <!--Header Form template.-->
+    <header id="header">Event Sign-up Page
+        <!--Header Content Here.-->        
+    </header>
+    <!--Navigation Form Template-->
+    <nav id="navbar">
+        <!--Navigation Content Here.-->
+        <a href="Donation Tracker\DonationTracker.html">Donation Tracker</a>
+        <a href="Volunteer Hours\VolunteerHours.html">Volunteer Hours Tracker</a>
+        <a href="Event Signup\EventSignup.html">Event Signup</a>
+    </nav>
+
+    <main>
+        <!--Header for Event Signup.-->
+        <h1>Event Signup</h1>
+        <!--Create Form Structure.-->
+        <form id = "event-sign-up-form">
+            <!--Create text-box for Event Name.-->
+            <label for ="event-name">Event Name:</label>
+            <input type="text" id="event-name" name="event-name" required><br><br>
+            <!--Create text-box for representative.-->
+            <label for="rep-name">Representative Name:</label>
+            <input type="text" id="rep-name" name="rep-name" required><br><br>
+            <!--Create text-box for email.-->
+            <label for="rep-email">Representative E-mail:</label>
+            <input type="text" id="rep-email" name="rep-email" required><br><br>
+            <!--Create drop-down menu for role-->
+            <label for="role">Role:</label>
+            <select id="role" name="role" required>
+                <!--Create Options-->
+                <option value="sponsor">Sponsor</option>
+                <option value="participant">Participant</option>
+                <option value="organizer">Organizer</option>
+            </select><br><br>
+            <!--Create Button for submission-->
+            <button type="submit">Sign-up</button>
+        </form>
+
+    </main>
+    <footer id="footer">PiXELL River Financial</footer>
+    <script src="event-signup.js"></script>
 </body>
 </html>
