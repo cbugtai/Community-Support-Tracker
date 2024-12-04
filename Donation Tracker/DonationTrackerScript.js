@@ -1,4 +1,7 @@
 function init(){
+    //Shows donation history
+    showHistory();
+
     // Submit Event
     const form = document.getElementById("donation-form");
     form.addEventListener("submit", onSubmit);
@@ -21,7 +24,8 @@ async function onSubmit(event){
 
     //Checks if all validations return true
     if (nameValid && amountValid && dateValid){
-        collectData(nameInput.value, amountInput.value, dateInput.value, messageInput.value)
+        let formData = collectData(nameInput.value, amountInput.value, dateInput.value, messageInput.value);
+        saveDonationHistory(formData);
     }
 }
 
@@ -91,6 +95,7 @@ async function validateDateInput(dateInput){
             isDateValid = false
         }
     }
+
     return isDateValid
 }
 
@@ -125,6 +130,38 @@ function collectData(name, amount, date, message = ""){
     
     return formData;
 }
+
+// either creates an empy donationHistory array or gets the donationHistory from localStorage 
+async function getDonationHistory(){
+    if (localStorage.getItem("donationHistory") === null){
+        return [];
+    } else {
+        return JSON.parse(localStorage.getItem("donationHistory"))
+    }
+}
+
+// saves formData object to an array of formData objects called donationHistory
+// then saves donationHistory to local storage un the name "DONATIONHISTORY"
+async function saveDonationHistory(formData){
+    let donationHistory = await getDonationHistory();
+    
+    donationHistory.unshift(formData)
+
+    localStorage.setItem("donationHistory", JSON.stringify(donationHistory));
+    console.log("local storage after", JSON.parse(localStorage.getItem("donationHistory")))
+}
+
+// adds all data in storage to a table
+function showHistory(){
+
+}
+
+// deletes this row of data from local storage
+function deleteRow(){
+
+}
+
+localStorage.clear();
 
 // Exports the module snecessary when running tests
 if (typeof window !== "undefined"){
