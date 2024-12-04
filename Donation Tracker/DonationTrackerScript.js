@@ -186,8 +186,13 @@ async function showHistory(){
 
             dateBody.innerHTML = donation["Donation Date"]
             nameBody.innerHTML = donation["Charity Name"]
-            amountBody.innerHTML = donation["Donation Amount"]
-            messageBody.innerHTML = donation["Donation Message"]
+            amountBody.innerHTML = Intl.NumberFormat('en-US',
+            {
+                style: 'currency',
+                currency: 'USD'
+            }
+        ).format(donation["Donation Amount"])
+            messageBody.innerHTML = (`"${donation["Donation Message"]}"`)
 
         })
         
@@ -203,7 +208,7 @@ function deleteRow(){
 
 //localStorage.clear();
 
-// Exports the module snecessary when running tests
+// Exports the modules necessary when running tests
 if (typeof window !== "undefined"){
     window.onload = init;
 } else {

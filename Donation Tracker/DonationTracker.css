@@ -93,6 +93,11 @@
     padding-bottom: 0px;
 }
 
+table{
+    max-width: 50%;
+    margin: auto;
+    margin-top: 20px;
+}
 table, td {
     border: 1px solid black;
   }
