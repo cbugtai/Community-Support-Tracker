@@ -1,5 +1,5 @@
 function init(){
-    //Shows donation history
+    //Shows donation history (if any)
     showHistory();
 
     // Submit Event
@@ -25,7 +25,9 @@ async function onSubmit(event){
     //Checks if all validations return true
     if (nameValid && amountValid && dateValid){
         let formData = collectData(nameInput.value, amountInput.value, dateInput.value, messageInput.value);
-        saveDonationHistory(formData);
+        await saveDonationHistory(formData);
+        // Show donation history
+        showHistory()
     }
 }
 
@@ -133,10 +135,10 @@ function collectData(name, amount, date, message = ""){
 
 // either creates an empy donationHistory array or gets the donationHistory from localStorage 
 async function getDonationHistory(){
-    if (localStorage.getItem("donationHistory") === null){
+    if (localStorage.getItem("DONATIONHISTORY") === null){
         return [];
     } else {
-        return JSON.parse(localStorage.getItem("donationHistory"))
+        return JSON.parse(localStorage.getItem("DONATIONHISTORY"))
     }
 }
 
@@ -147,14 +149,36 @@ async function saveDonationHistory(formData){
     
     donationHistory.unshift(formData)
 
-    localStorage.setItem("donationHistory", JSON.stringify(donationHistory));
-    console.log("local storage after", JSON.parse(localStorage.getItem("donationHistory")))
+    localStorage.setItem("DONATIONHISTORY", JSON.stringify(donationHistory));
 }
 
 // adds all data in storage to a table
-function showHistory(){
+async function showHistory(){
+    let donationHistory = await getDonationHistory();
+    console.log("showHistory",donationHistory)
 
+    if (donationHistory.length > 0) {
+        //creating the table
+        const table = document.createElement("table")
+        table.id = "donation-history"
+        //Adding Headers
+        let header = table.createTHead();
+        let headerRow = header.insertRow(0);
+        // header columns
+        let dateCell = headerRow.insertCell(0);
+        let nameCell = headerRow.insertCell(1);
+        let amountCell = headerRow.insertCell(2);
+        let messageCell = headerRow.insertCell(3);
+        // header text
+        dateCell.innerHTML = "Date of Donation"
+        nameCell.innerHTML = "Charity Name"
+        amountCell.innerHTML = "Donation Amount"
+        messageCell.innerHTML = "Donor Message"
+        
+        document.getElementById("donation-history").replaceWith(table)
+    } 
 }
+
 
 // deletes this row of data from local storage
 function deleteRow(){
