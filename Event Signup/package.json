@@ -9,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "jest":{
+  "jest": {
     "testEnvironment": "jsdom"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
