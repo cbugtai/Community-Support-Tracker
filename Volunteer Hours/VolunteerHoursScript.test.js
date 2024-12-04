@@ -6,7 +6,7 @@ const {
   validateHoursInput,
   validateDateInput,
   validateRatingInput,
-} = require("./VolunteerHoursScript"); // Adjust the path if necessary
+} = require("./VolunteerHoursScript"); 
 
 describe("Form Submission Tests", () => {
   let dom;
