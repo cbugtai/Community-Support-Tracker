@@ -2,6 +2,8 @@ function init() {
   // Attach Submit Event to the form
   const form = document.getElementById("volunteer-form");
   form.addEventListener("submit", onSubmit);
+
+  loadFromLocalStorage();
 }
 
 /**
@@ -9,7 +11,7 @@ function init() {
  * Validates inputs and collects form data.
  */
 async function onSubmit(event) {
-  event.preventDefault(); // Prevent default form submission
+  event.preventDefault();
 
   // Form Inputs
   const charityInput = document.getElementById("charity-name");
@@ -17,7 +19,7 @@ async function onSubmit(event) {
   const dateInput = document.getElementById("date-volunteered");
   const ratingInput = document.getElementById("experience-rating");
 
-  await clearErrorMessages(); // Clear previous error messages
+  await clearErrorMessages();
 
   // Validate all inputs
   const inputsValid = await Promise.all([
@@ -37,8 +39,19 @@ async function onSubmit(event) {
     );
 
     console.log("Form Submitted Successfully:", formData);
+    updateTable(formData);
+    saveToLocalStorage(formData); 
+    updateTotalHours(); 
+
+// Clear the form inputs
+    form.reset();
   }
 }
+
+
+
+
+
 
 /**
  * Validates the Charity Name input.
