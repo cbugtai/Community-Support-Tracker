@@ -218,6 +218,8 @@ async function showHistory(){
         
         document.getElementById("donation-history").replaceWith(table)
     } 
+    //Summary
+    showSummary()
 }
 
 
@@ -235,7 +237,21 @@ async function deleteRow(event){
     } 
 }
 
-//localStorage.clear();
+async function showSummary(){
+    let donationHistory = await getDonationHistory();
+    donationSummary = 0
+    for (let i = 0; i < donationHistory.length; i++) {
+        donationSummary = donationSummary + Number(donationHistory[i]["Donation Amount"])
+    }
+    donationSummaryFormatted = Intl.NumberFormat('en-US',
+                                    {
+                                        style: 'currency',
+                                        currency: 'USD'
+                                    }
+                                ).format(donationSummary)
+    const summary = document.getElementById("donation-summary");
+    summary.innerHTML = `Total Amount Donated: ${donationSummaryFormatted}`
+}
 
 // Exports the modules necessary when running tests
 if (typeof window !== "undefined"){
