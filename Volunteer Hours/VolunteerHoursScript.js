@@ -48,9 +48,79 @@ async function onSubmit(event) {
   }
 }
 
+/**
+ * Updates the table with the submitted data.
+ * @param {object} formData - The data collected from the form.
+ */
+function updateTable(formData) {
+  const tableBody = document.querySelector("#volunteer-table tbody");
+  const newRow = document.createElement("tr");
 
+  newRow.innerHTML = `
+    <td>${formData["Charity Name"]}</td>
+    <td>${formData["Hours Volunteered"]}</td>
+    <td>${formData["Date Volunteered"]}</td>
+    <td>${formData["Experience Rating"]}</td>
+    <td><button class="delete-btn">Delete</button></td>
+  `;
 
+  // Add delete functionality to the button
+  newRow.querySelector(".delete-btn").addEventListener("click", () => {
+    deleteRow(newRow, formData["Hours Volunteered"]);
+  });
 
+  tableBody.appendChild(newRow);
+}
+
+  /**
+ * Saves data to localStorage.
+ * @param {object} data - The data to save.
+ */
+function saveToLocalStorage(data) {
+  const logs = JSON.parse(localStorage.getItem("volunteerLogs")) || [];
+  logs.push(data);
+  localStorage.setItem("volunteerLogs", JSON.stringify(logs));
+}
+
+/**
+ * Loads data from localStorage and updates the table.
+ */
+function loadFromLocalStorage() {
+  const logs = JSON.parse(localStorage.getItem("volunteerLogs")) || [];
+  logs.forEach((log) => updateTable(log));
+  updateTotalHours();
+}
+
+ /**
+ * Deletes a row from the table and updates localStorage and the summary.
+ * @param {HTMLElement} row - The row to delete.
+ * @param {string} hours - The hours associated with the row.
+ */
+function deleteRow(row, hours) {
+  const tableBody = document.querySelector("#volunteer-table tbody");
+  tableBody.removeChild(row);
+
+  const logs = JSON.parse(localStorage.getItem("volunteerLogs")) || [];
+  const updatedLogs = logs.filter(
+    (log) => log["Hours Volunteered"] !== hours
+  );
+  localStorage.setItem("volunteerLogs", JSON.stringify(updatedLogs));
+
+  updateTotalHours();
+}
+
+/**
+ * Updates the total hours summary based on table data.
+ */
+function updateTotalHours() {
+  const logs = JSON.parse(localStorage.getItem("volunteerLogs")) || [];
+  const totalHours = logs.reduce(
+    (sum, log) => sum + parseInt(log["Hours Volunteered"], 10),
+    0
+  );
+
+  document.getElementById("total-hours").innerText = totalHours;
+}
 
 
 /**
