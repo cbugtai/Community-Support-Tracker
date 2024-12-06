@@ -1,17 +1,18 @@
 .content {
-    padding: 10px;
+    padding: 20px;
     margin: auto;
     max-width: 1200px;
+
 }
 
 /* Form Container */
 #volunteer-form {
     max-width: 40%;
     margin: auto;
-    box-shadow: 6px 5px 5px rgba(0, 0, 0, 0.1);
-    border: 1px outset #ccc;
-    border-radius: 10px;
     padding: 20px;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 10px;
     background-color: #f5f5f5;
     font-family: 'Roboto', sans-serif;
 }
@@ -26,12 +27,12 @@
 #date-volunteered,
 #experience-rating {
     width: 100%;
-    padding: 12px 20px;
-    margin-bottom: 10px;
-    display: block;
+    padding: 12px 15px;
+    margin-bottom: 15px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 6px;
     box-sizing: border-box;
+    font-size: 1rem;
 }
 
 #experience-details {
@@ -93,6 +94,74 @@
     background-color: #f5f5f5;
 }
 
+/* Volunteer Summary Section */
+#volunteer-summary-section {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+}
+
+#volunteer-summary-section h2 {
+    font-size: 1.5rem;
+    color: #4A90E2;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#volunteer-summary-section p {
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Table Styling */
+#volunteer-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#volunteer-table th, #volunteer-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+    font-size: 1rem;
+}
+
+#volunteer-table th {
+    background-color: #4A90E2;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+#volunteer-table td {
+    color: #333;
+}
+
+#volunteer-table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+
+/* Delete Button Style */
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  
+  .delete-btn:hover {
+    background-color: #d32f2f;
+  }
+
 /* Accessibility Improvements */
 .error-message {
     color: red;
@@ -101,15 +170,34 @@
     margin-bottom: 10px;
 }
 
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     #volunteer-form {
-        max-width: 70%;
+        max-width: 80%;
+    }
+
+    #volunteer-table th, #volunteer-table td {
+        padding: 8px;
+        font-size: 0.85rem;
+    }
+
+    #volunteer-summary-section p {
+        font-size: 1rem;
     }
 }
 
 @media (max-width: 480px) {
     #volunteer-form {
-        max-width: 90%;
+        max-width: 95%;
+    }
+
+    #volunteer-table th, #volunteer-table td {
+        padding: 6px;
+        font-size: 0.8rem;
+    }
+
+    #volunteer-summary-section h2 {
+        font-size: 1.2rem;
     }
 }
