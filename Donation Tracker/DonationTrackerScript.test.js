@@ -1,9 +1,25 @@
 const { JSDOM } = require("jsdom");
-const { init } = require("./DonationTrackerScript");
-const { collectData }  = require("./DonationTrackerScript");
-const { validateNameInput } = require("./DonationTrackerScript");
-const { validateAmountInput } = require("./DonationTrackerScript");
-const { validateDateInput } = require("./DonationTrackerScript");
+const { init, collectData, validateNameInput, validateAmountInput, validateDateInput } = require("./DonationTrackerScript");
+
+let dom;
+let document;
+
+beforeEach(() => {
+    dom = new JSDOM(`
+        <form id="donation-form">
+            <input type="text" id="name-input" />
+            <input type="number" id="amount-input" />
+            <input type="date" id="date-input" />
+            <input type="text" id="message-input" />
+        </form>
+
+        <h1 id="donation-summary"></h1>
+
+        <table id="donation-history"></table>
+    `);
+    document = dom.window.document;
+    global.document = document;
+});
 
 // Testing From Submission
 test("testing form submission", () => {
@@ -113,3 +129,96 @@ test("testing collectData() saves data passed into it in a dictionary", () => {
         "Donation Message": ''
     });
 });
+
+describe("STAGE TWO", () => {
+    const { 
+        saveDonationHistory, 
+        getDonationHistory,
+        showHistory,
+        showSummary,
+        deleteRow
+    } = require("./DonationTrackerScript")
+
+    describe("Persitence Test", () => {
+        class localStorageMock{
+            constructor(){
+                this.store = {}
+            }
+            getItem(key){
+                return this.store[key]  || null;
+            }
+            setItem(key, value){
+                this.store[key] = String(value);
+            }
+        }
+        global.localStorage = new localStorageMock
+
+        test("Test that data is correctly stored in localStorage", async () => {
+            formData1 = {
+                "Charity Name" : "testName1",
+                "Donation Amount": 100, 
+                "Donation Date": "2024-11-28", 
+                "Donation Message": "Testing 1234"
+            }
+
+            await saveDonationHistory(formData1);
+
+            expect(JSON.parse(localStorage.getItem("DONATIONHISTORY"))).toEqual([formData1]);
+        })
+        test("Test that data is correctly retrieved and loaded into table", async () => {
+            await showHistory();
+            let tableItems = document.getElementsByTagName("td");
+            // td's 0-4 are the headers
+            let tableDate = tableItems[5].innerHTML;
+            let tableName = tableItems[6].innerHTML;
+            let tableAmount = tableItems[7].innerHTML;
+            let tableMessage = tableItems[8].innerHTML;
+
+            expect(tableDate).toBe("2024-11-28");
+            expect(tableName).toBe("testName1");
+            expect(tableAmount).toBe("$100.00");
+            expect(tableMessage).toBe(`"Testing 1234"`);
+        })
+    })
+    describe("Summary and Deletion Test", () =>{
+        test("Test that the summary section correctly calculates and displays the total amount donated.", async () => {
+            formData2 = {
+                "Charity Name" : "randomCharity2",
+                "Donation Amount": 7777, 
+                "Donation Date": "2024-12-05", 
+                "Donation Message": ""
+            }
+
+            await showSummary();
+            let summary = document.getElementById("donation-summary").innerHTML;
+            expect(summary).toBe("Total Amount Donated: $100.00");
+
+            //adding another entry
+            await saveDonationHistory(formData2);
+
+            await showSummary()
+            let summaryUpdated = await document.getElementById("donation-summary").innerHTML;
+            expect(summaryUpdated).toBe("Total Amount Donated: $7,877.00");
+        })
+        test("Test that the delete button removes a record from the table and localStorage", async () => {
+            await showHistory();
+            let tableItems = document.getElementsByTagName("td");
+
+            expect(tableItems.length).toBe(15);
+            expect((JSON.parse(localStorage.getItem("DONATIONHISTORY"))).length).toBe(2);
+            
+            // Always true when asked for confirmation
+            global.confirm = jest.fn(() => true)
+            // delete row at index 1
+            await deleteRow(1);
+            
+            expect(tableItems.length).toBe(10);
+            expect((JSON.parse(localStorage.getItem("DONATIONHISTORY"))).length).toBe(1);
+        })
+        test("Test that the total donation amount in the summary section is updated when a donation is deleted.", async () => {
+            await showSummary();
+            let summary = document.getElementById("donation-summary").innerHTML;
+            expect(summary).toBe("Total Amount Donated: $7,777.00");
+        })
+    })
+})
