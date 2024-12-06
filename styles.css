@@ -8,7 +8,7 @@ body {
 }
 
 /* Header Styles */
-header {
+#header {
     font-family: 'Montserrat', sans-serif;
     background-color: #4A90E2;
     color: white;
