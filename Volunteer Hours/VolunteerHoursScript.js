@@ -233,11 +233,17 @@ if (typeof window !== "undefined") {
 } else {
   module.exports = {
     init,
+    onSubmit,
     collectData,
     validateCharityInput,
     validateHoursInput,
     validateDateInput,
     validateRatingInput,
-    showInputError,
+    updateTable,
+    saveToLocalStorage,
+    loadFromLocalStorage,
+    deleteRow,
+  calculateTotalHours,
+  calculateTotalHours,
   };
 }
