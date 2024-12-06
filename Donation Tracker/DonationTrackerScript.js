@@ -237,6 +237,7 @@ async function deleteRow(event){
     } 
 }
 
+// shows the total amount donated
 async function showSummary(){
     let donationHistory = await getDonationHistory();
     donationSummary = 0

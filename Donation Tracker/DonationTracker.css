@@ -93,12 +93,24 @@
     padding-bottom: 0px;
 }
 
+/* 
+    Summary css 
+*/
+#donation-summary{
+    margin: auto;
+    text-align: center;
+    padding: 10px;
+}
+/* 
+    Table css 
+*/
 table{
     max-width: 60%;
     margin: auto;
     margin-top: 20px;
+    margin-bottom: 50px;
 }
-table, td {
+.table, td {
     border: 1px solid black;
   }
 
