@@ -167,8 +167,6 @@ async function showHistory(){
                     `;
 
     let donationHistory = await getDonationHistory();
-    console.log("showHistory",donationHistory)
-
     if (donationHistory.length > 0) {
         //creating the table
         const table = document.createElement("table")
@@ -213,23 +211,26 @@ async function showHistory(){
             } else {
                 messageBody.innerHTML = (`"${donationHistory[i]["Donation Message"]}"`)
             }
-            deleteBody.innerHTML = `<button value=${i} onclick="deleteRow(this)">Delete</button>`
+            deleteBody.innerHTML = `<button value=${i} onclick="deleteRow(this.value)">Delete</button>`
         }
         
         document.getElementById("donation-history").replaceWith(table)
-    } 
+    } else {
+        const tableEmpty = document.createElement("table")
+        tableEmpty.id = "donation-history"
+        document.getElementById("donation-history").replaceWith(tableEmpty)
+    }
     //Summary
     showSummary()
 }
 
 
 // deletes this row of data from local storage
-async function deleteRow(event){
+async function deleteRow(index){
     let text = `Are you sure you want to delete this donation?`
 
     if (confirm(text) == true){
         let donationHistory = await getDonationHistory();
-        let index = event.value
 
         donationHistory.splice(index, 1)
         localStorage.setItem("DONATIONHISTORY", JSON.stringify(donationHistory));
@@ -258,7 +259,8 @@ async function showSummary(){
 if (typeof window !== "undefined"){
     window.onload = init;
 } else {
-    module.exports = { init, collectData, validateNameInput, validateAmountInput, validateDateInput, showInputError }
+    module.exports = { init, collectData, validateNameInput, validateAmountInput, validateDateInput, showInputError, 
+                        saveDonationHistory, getDonationHistory, showHistory, showSummary }
 }
 
 
