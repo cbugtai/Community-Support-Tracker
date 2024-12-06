@@ -184,13 +184,13 @@ async function showHistory(){
         let messageHeader = headerRow.insertCell(3);
         let deleteHeader = headerRow.insertCell(4);
         // header text
-        dateHeader.innerHTML = "Date of Donation"
+        dateHeader.innerHTML = "Date"
         nameHeader.innerHTML = "Charity Name"
         amountHeader.innerHTML = "Donation Amount"
         messageHeader.innerHTML = "Donor Message"
         deleteHeader.innerHTML =  svgString
         // body contents
-        donationHistory.forEach(donation => {
+        for (let i = 0; i < donationHistory.length; i++) {
             let body = table.createTBody();
             let bodyRow = body.insertRow(0);
 
@@ -200,17 +200,21 @@ async function showHistory(){
             let messageBody = bodyRow.insertCell(3);
             let deleteBody = bodyRow.insertCell(4)
 
-            dateBody.innerHTML = donation["Donation Date"]
-            nameBody.innerHTML = donation["Charity Name"]
+            dateBody.innerHTML = donationHistory[i]["Donation Date"]
+            nameBody.innerHTML = donationHistory[i]["Charity Name"]
             amountBody.innerHTML = Intl.NumberFormat('en-US',
                                         {
                                             style: 'currency',
                                             currency: 'USD'
                                         }
-                                    ).format(donation["Donation Amount"])
-            messageBody.innerHTML = donation["Donation Message"]
-            
-        })
+                                    ).format(donationHistory[i]["Donation Amount"])
+            if (donationHistory[i]["Donation Message"] == ""){
+                messageBody.innerHTML = donationHistory[i]["Donation Message"]
+            } else {
+                messageBody.innerHTML = (`"${donationHistory[i]["Donation Message"]}"`)
+            }
+            deleteBody.innerHTML = `<button value=${i} onclick="deleteRow(this)">Delete</button>`
+        }
         
         document.getElementById("donation-history").replaceWith(table)
     } 
@@ -218,8 +222,17 @@ async function showHistory(){
 
 
 // deletes this row of data from local storage
-function deleteRow(){
+async function deleteRow(event){
+    let text = `Are you sure you want to delete this donation?`
 
+    if (confirm(text) == true){
+        let donationHistory = await getDonationHistory();
+        let index = event.value
+
+        donationHistory.splice(index, 1)
+        localStorage.setItem("DONATIONHISTORY", JSON.stringify(donationHistory));
+        showHistory()
+    } 
 }
 
 //localStorage.clear();
