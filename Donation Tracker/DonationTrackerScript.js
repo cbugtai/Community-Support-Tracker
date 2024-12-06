@@ -260,7 +260,7 @@ if (typeof window !== "undefined"){
     window.onload = init;
 } else {
     module.exports = { init, collectData, validateNameInput, validateAmountInput, validateDateInput, showInputError, 
-                        saveDonationHistory, getDonationHistory, showHistory, showSummary }
+                        saveDonationHistory, getDonationHistory, showHistory, showSummary, deleteRow }
 }
 
 
