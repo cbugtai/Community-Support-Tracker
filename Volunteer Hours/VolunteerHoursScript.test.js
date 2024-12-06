@@ -6,6 +6,11 @@ const {
   validateHoursInput,
   validateDateInput,
   validateRatingInput,
+  updateTable,
+  saveToLocalStorage,
+  loadFromLocalStorage,
+  deleteRow,
+  calculateTotalHours,
 } = require("./VolunteerHoursScript");
 
 describe("Form Submission Tests", () => {
@@ -19,11 +24,38 @@ describe("Form Submission Tests", () => {
         <input type="number" id="hours-volunteered" />
         <input type="date" id="date-volunteered" />
         <input type="number" id="experience-rating" />
+        <button type="submit">Submit</button>
       </form>
+       <section id="volunteer-summary-section">
+        <p>Total Hours Volunteered: <span id="total-hours">0</span></p>
+        <table id="volunteer-table">
+          <thead>
+            <tr>
+              <th>Charity Name</th>
+              <th>Hours Volunteered</th>
+              <th>Date</th>
+              <th>Experience Rating</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
     `);
+
     document = dom.window.document;
     global.document = document;
+    global.localStorage = {
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+    };
   });
+
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
 
   test("Function is triggered on form submission", () => {
     const form = document.getElementById("volunteer-form");
@@ -103,4 +135,103 @@ describe("Form Submission Tests", () => {
       expect(await validateRatingInput(ratingInput)).toBe(true);
     });
   });
+  describe("Table and Persistence Features", () => {
+    test("Updates table with new row", () => {
+      const formData = {
+        "Charity Name": "Charity A",
+        "Hours Volunteered": "5",
+        "Date Volunteered": "2024-12-02",
+        "Experience Rating": "4",
+      };
+
+      updateTable(formData);
+
+      const rows = document.querySelectorAll("#volunteer-table tbody tr");
+
+      expect(rows.length).toBe(1);
+      expect(rows[0].children[0].textContent).toBe("Charity A");
+      expect(rows[0].children[1].textContent).toBe("5");
+    });
+
+    test("Saves data to localStorage", () => {
+      const formData = {
+        "Charity Name": "Charity A",
+        "Hours Volunteered": "5",
+        "Date Volunteered": "2024-12-02",
+        "Experience Rating": "4",
+      };
+
+      saveToLocalStorage([formData]);
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        "volunteerLogs",
+        JSON.stringify([formData])
+      );
+    });
+
+    test("Loads data from localStorage and updates the table", () => {
+      const mockLogs = [
+        {
+          "Charity Name": "Charity A",
+          "Hours Volunteered": "5",
+          "Date Volunteered": "2024-12-02",
+          "Experience Rating": "4",
+        },
+      ];
+
+      localStorage.getItem.mockReturnValueOnce(JSON.stringify(mockLogs));
+      loadFromLocalStorage();
+
+      const rows = document.querySelectorAll("#volunteer-table tbody tr");
+      expect(rows.length).toBe(1);
+      expect(rows[0].children[0].textContent).toBe("Charity A");
+    });
+
+    test("Deletes a row and updates localStorage", () => {
+      const formData = {
+        "Charity Name": "Charity A",
+        "Hours Volunteered": "5",
+        "Date Volunteered": "2024-12-02",
+        "Experience Rating": "4",
+      };
+
+      updateTable(formData);
+      saveToLocalStorage([formData]);
+
+      const row = document.querySelector("#volunteer-table tbody tr");
+      deleteRow(row, "5");
+
+      expect(document.querySelectorAll("#volunteer-table tbody tr").length).toBe(0);
+      expect(localStorage.setItem).toHaveBeenCalledWith("volunteerLogs", JSON.stringify([]));
+    });
+
+    test("Calculates total hours correctly", () => {
+      const mockLogs = [
+        { "Hours Volunteered": "5" },
+        { "Hours Volunteered": "10" },
+      ];
+
+      const total = calculateTotalHours(mockLogs);
+      expect(total).toBe(15);
+    });
+
+    test("Updates total hours when rows are added or deleted", () => {
+      const mockLogs = [
+        { "Hours Volunteered": "5" },
+        { "Hours Volunteered": "10" },
+      ];
+
+      saveToLocalStorage(mockLogs);
+      loadFromLocalStorage();
+
+      const totalHoursElement = document.getElementById("total-hours");
+      expect(totalHoursElement.textContent).toBe("15");
+
+      const row = document.querySelector("#volunteer-table tbody tr");
+      row.querySelector(".delete-btn").click();
+
+      expect(totalHoursElement.textContent).toBe("10");
+    });
+  });
 });
+
+  
