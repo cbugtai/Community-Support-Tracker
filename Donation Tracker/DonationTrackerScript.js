@@ -154,6 +154,18 @@ async function saveDonationHistory(formData){
 
 // adds all data in storage to a table
 async function showHistory(){
+    //This is a trashcan svg i got from chatGPT
+    const svgString = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="5 5 80 80" width="50" height="50">
+                    <rect x="25" y="30" width="50" height="50" fill="#808080" stroke="#666" stroke-width="2" rx="5" ry="5"/>
+                    <rect x="20" y="20" width="60" height="10" fill="#666" stroke="#555" stroke-width="2" rx="3" ry="3"/>
+                    <rect x="40" y="15" width="20" height="5" fill="#444" stroke="#333" stroke-width="2" rx="2" ry="2"/>
+                    <line x1="35" y1="35" x2="35" y2="75" stroke="#555" stroke-width="2"/>
+                    <line x1="50" y1="35" x2="50" y2="75" stroke="#555" stroke-width="2"/>
+                    <line x1="65" y1="35" x2="65" y2="75" stroke="#555" stroke-width="2"/>
+                    </svg>
+                    `;
+
     let donationHistory = await getDonationHistory();
     console.log("showHistory",donationHistory)
 
@@ -170,12 +182,14 @@ async function showHistory(){
         let nameHeader = headerRow.insertCell(1);
         let amountHeader = headerRow.insertCell(2);
         let messageHeader = headerRow.insertCell(3);
+        let deleteHeader = headerRow.insertCell(4);
         // header text
         dateHeader.innerHTML = "Date of Donation"
         nameHeader.innerHTML = "Charity Name"
         amountHeader.innerHTML = "Donation Amount"
         messageHeader.innerHTML = "Donor Message"
-
+        deleteHeader.innerHTML =  svgString
+        // body contents
         donationHistory.forEach(donation => {
             let body = table.createTBody();
             let bodyRow = body.insertRow(0);
@@ -184,17 +198,18 @@ async function showHistory(){
             let nameBody = bodyRow.insertCell(1);
             let amountBody = bodyRow.insertCell(2);
             let messageBody = bodyRow.insertCell(3);
+            let deleteBody = bodyRow.insertCell(4)
 
             dateBody.innerHTML = donation["Donation Date"]
             nameBody.innerHTML = donation["Charity Name"]
             amountBody.innerHTML = Intl.NumberFormat('en-US',
-            {
-                style: 'currency',
-                currency: 'USD'
-            }
-        ).format(donation["Donation Amount"])
-            messageBody.innerHTML = (`"${donation["Donation Message"]}"`)
-
+                                        {
+                                            style: 'currency',
+                                            currency: 'USD'
+                                        }
+                                    ).format(donation["Donation Amount"])
+            messageBody.innerHTML = donation["Donation Message"]
+            
         })
         
         document.getElementById("donation-history").replaceWith(table)
@@ -207,7 +222,7 @@ function deleteRow(){
 
 }
 
-localStorage.clear();
+//localStorage.clear();
 
 // Exports the modules necessary when running tests
 if (typeof window !== "undefined"){

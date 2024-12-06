@@ -24,7 +24,7 @@
     display: grid;
     width: 100%;
     column-gap: 10px;
-    grid-template-columns: auto auto;
+    grid-template-columns: 50% 50%;
     align-items: center;
 }
 
@@ -114,19 +114,38 @@ thead > tr > td{
 /* for mobile or tablet devices */
 @media (max-width: 900px){
     #donation-form{
-        max-width: 50%;}}
+        max-width: 50%;
+    }
+}
 @media (max-width: 720px){
     #donation-form{
-        max-width: 60%;}}
+        max-width: 60%;
+    }
+    .grid-container{
+        grid-template-columns: auto;
+    }
+}
 @media (max-width: 600px){
     #donation-form{
-        max-width: 75%;}}
+        max-width: 75%;
+    }
+    .grid-container{
+        grid-template-columns: auto;
+    }
+}
 @media (max-width: 512px){
     #donation-form{
-        max-width: 85%;}}
+        max-width: 85%;
+    }
+    .grid-container{
+        grid-template-columns: auto;
+    }
+}
 @media (max-width: 480px){
     #donation-form{
-        max-width: 100%;}}
-@media (max-width: 420px){
+        max-width: 100%;
+    }
     .grid-container{
-        grid-template-columns: auto;}}
+        grid-template-columns: auto;
+    }
+}
