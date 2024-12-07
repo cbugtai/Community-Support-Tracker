@@ -13,6 +13,31 @@ const {
   calculateTotalHours,
 } = require("./VolunteerHoursScript");
 
+class LocalStorageMock {
+  constructor() {
+    this.store = {};
+  }
+
+  getItem(key) {
+    return this.store[key] || null;
+  }
+
+  setItem(key, value) {
+    this.store[key] = String(value);
+  }
+
+  clear() {
+    this.store = {};
+  }
+
+  removeItem(key) {
+    delete this.store[key];
+  }
+}
+
+global.localStorage = new LocalStorageMock();
+
+
 describe("Volunteer Hours Tracker", () => {
   let dom;
   let document;
@@ -46,11 +71,18 @@ describe("Volunteer Hours Tracker", () => {
     document = dom.window.document;
     global.document = document;
     global.localStorage = {
-      getItem: jest.fn(),
-      setItem: jest.fn(),
+      store: {},
+      getItem: jest.fn((key) => {
+        return this.store[key] || null;
+      }),
+      setItem: jest.fn((key, value) => {
+        this.store[key] = value;
+      }),
+      clear: jest.fn(() => {
+        this.store = {};
+      }),
     };
   });
-
 
   afterEach(() => {
     jest.clearAllMocks();
