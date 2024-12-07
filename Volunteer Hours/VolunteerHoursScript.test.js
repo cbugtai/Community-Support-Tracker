@@ -13,7 +13,7 @@ const {
   calculateTotalHours,
 } = require("./VolunteerHoursScript");
 
-describe("Form Submission Tests", () => {
+describe("Volunteer Hours Tracker", () => {
   let dom;
   let document;
 
@@ -214,4 +214,3 @@ describe("Form Submission Tests", () => {
     });
   });
 });
-  
