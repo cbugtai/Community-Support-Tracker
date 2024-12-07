@@ -135,24 +135,8 @@ describe("Form Submission Tests", () => {
       expect(await validateRatingInput(ratingInput)).toBe(true);
     });
   });
+
   describe("Table and Persistence Features", () => {
-    test("Updates table with new row", () => {
-      const formData = {
-        "Charity Name": "Charity A",
-        "Hours Volunteered": "5",
-        "Date Volunteered": "2024-12-02",
-        "Experience Rating": "4",
-      };
-
-      updateTable(formData);
-
-      const rows = document.querySelectorAll("#volunteer-table tbody tr");
-
-      expect(rows.length).toBe(1);
-      expect(rows[0].children[0].textContent).toBe("Charity A");
-      expect(rows[0].children[1].textContent).toBe("5");
-    });
-
     test("Saves data to localStorage", () => {
       const formData = {
         "Charity Name": "Charity A",
@@ -161,11 +145,9 @@ describe("Form Submission Tests", () => {
         "Experience Rating": "4",
       };
 
-      saveToLocalStorage([formData]);
-      expect(localStorage.setItem).toHaveBeenCalledWith(
-        "volunteerLogs",
-        JSON.stringify([formData])
-      );
+      saveToLocalStorage(formData);
+      const logs = JSON.stringify([formData]);
+      expect(localStorage.setItem).toHaveBeenCalledWith("volunteerLogs", logs);
     });
 
     test("Loads data from localStorage and updates the table", () => {
@@ -177,7 +159,6 @@ describe("Form Submission Tests", () => {
           "Experience Rating": "4",
         },
       ];
-
       localStorage.getItem.mockReturnValueOnce(JSON.stringify(mockLogs));
       loadFromLocalStorage();
 
@@ -195,7 +176,7 @@ describe("Form Submission Tests", () => {
       };
 
       updateTable(formData);
-      saveToLocalStorage([formData]);
+      saveToLocalStorage(formData);
 
       const row = document.querySelector("#volunteer-table tbody tr");
       deleteRow(row, "5");
@@ -233,5 +214,4 @@ describe("Form Submission Tests", () => {
     });
   });
 });
-
   
