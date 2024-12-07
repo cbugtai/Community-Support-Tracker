@@ -13,8 +13,8 @@ body {
     background-color: #4A90E2;
     color: white;
     text-align: center;
-    padding: 1rem 0;
-    font-size: 2rem;
+    padding:10px;
+    font-size: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -65,9 +65,8 @@ footer{
     background-color: #4A90E2;
     color: white;
     text-align: center;
-    padding: 0.5rem 0;
+    padding: 10px;
     margin-top: 1rem;
-    font-size: 1rem;
 }
 
 
