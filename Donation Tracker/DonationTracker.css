@@ -86,7 +86,7 @@
 #donation-amount,
 #donation-date,
 #donor-message{
-    padding-bottom: 24px;
+    padding-bottom: 18px;
 }
 
 /* changed the padding when additional span elements are included to prevent the form from warping */
