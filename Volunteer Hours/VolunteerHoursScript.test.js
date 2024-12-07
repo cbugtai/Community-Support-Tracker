@@ -23,6 +23,9 @@ class localStorageMock{
   setItem(key, value){
       this.store[key] = String(value);
   }
+  clear() {
+    this.store = {};
+  }
 }
 global.localStorage = new localStorageMock;
 
@@ -59,18 +62,8 @@ describe("Volunteer Hours Tracker", () => {
 
     document = dom.window.document;
     global.document = document;
-    global.localStorage = {
-      store: {},
-      getItem: jest.fn((key) => {
-        return this.store[key] || null;
-      }),
-      setItem: jest.fn((key, value) => {
-        this.store[key] = value;
-      }),
-      clear: jest.fn(() => {
-        this.store = {};
-      }),
-    };
+
+    global.localStorage = new localStorageMock();
   });
 
   afterEach(() => {
@@ -78,7 +71,7 @@ describe("Volunteer Hours Tracker", () => {
   });
 
 
-  test("Function is triggered on form submission", () => {
+  test("onSubmit is triggered on form submission", () => {
     const form = document.getElementById("volunteer-form");
     const submitEvent = jest.fn(onSubmit);
 
@@ -167,13 +160,12 @@ describe("Volunteer Hours Tracker", () => {
       };
 
       saveToLocalStorage(formData);
-      expect(localStorage.setItem).toHaveBeenCalledWith(
-        "volunteerLogs",
-        JSON.stringify([formData])
-      );
+
+      const logs = JSON.parse(localStorage.getItem("volunteerLogs"));
+      expect(logs).toEqual([formData]);
     });
 
-    test("Loads data from localStorage and updates the table", () => {
+    test("Loads data from localStorage", () => {
       const mockLogs = [
         {
           "Charity Name": "Charity A",
@@ -199,27 +191,13 @@ describe("Volunteer Hours Tracker", () => {
         { "Hours Volunteered": "10" },
       ];
 
-      const total = calculateTotalHours(mockLogs);
-      expect(total).toBe(15);
-    });
-
-    test("Updates total hours when rows are added or deleted", () => {
-      const mockLogs = [
-        { "Hours Volunteered": "5" },
-        { "Hours Volunteered": "10" },
-      ];
-
-      saveToLocalStorage(mockLogs);
-      loadFromLocalStorage();
+      localStorage.setItem("volunteerLogs", JSON.stringify(mockLogs));
+      calculateTotalHours();
 
       const totalHoursElement = document.getElementById("total-hours");
       expect(totalHoursElement.textContent).toBe("15");
-
-      const row = document.querySelector("#volunteer-table tbody tr");
-      row.querySelector(".delete-btn").click();
-
-      expect(totalHoursElement.textContent).toBe("10");
     });
+
 
     test("Deletes a row and updates localStorage", () => {
       const formData = {
@@ -235,8 +213,26 @@ describe("Volunteer Hours Tracker", () => {
       const row = document.querySelector("#volunteer-table tbody tr");
       deleteRow(row, formData);
 
+      const logs = JSON.parse(localStorage.getItem("volunteerLogs"));
+      expect(logs.length).toBe(0);
       expect(document.querySelectorAll("#volunteer-table tbody tr").length).toBe(0);
-      expect(localStorage.setItem).toHaveBeenCalledWith("volunteerLogs", JSON.stringify([]));
+    });
+    test("Removes last row and updates total hours to 0", () => {
+      const formData = {
+        "Charity Name": "Charity A",
+        "Hours Volunteered": "5",
+        "Date Volunteered": "2024-12-02",
+        "Experience Rating": "4",
+      };
+
+      updateTable(formData);
+      saveToLocalStorage(formData);
+
+      const row = document.querySelector("#volunteer-table tbody tr");
+      deleteRow(row, formData);
+
+      const totalHoursElement = document.getElementById("total-hours");
+      expect(totalHoursElement.textContent).toBe("0");
     });
   });
 });
