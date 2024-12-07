@@ -19,32 +19,30 @@ async function onSubmit(event) {
   const dateInput = document.getElementById("date-volunteered");
   const ratingInput = document.getElementById("experience-rating");
 
-  await clearErrorMessages();
+   // Clear previous error messages
+   clearErrorMessages();
 
-  // Validate all inputs
-  const inputsValid = await Promise.all([
-    validateCharityInput(charityInput),
-    validateHoursInput(hoursInput),
-    validateDateInput(dateInput),
-    validateRatingInput(ratingInput),
-  ]);
+   // Validate all inputs
+   const isValidCharity = validateCharityInput(charityInput);
+   const isValidHours = validateHoursInput(hoursInput);
+   const isValidDate = validateDateInput(dateInput);
+   const isValidRating = validateRatingInput(ratingInput);
+ 
+ // If all validations pass, collect and process form data
+ if (isValidCharity && isValidHours && isValidDate && isValidRating) {
+  const formData = collectData(
+    charityInput.value,
+    hoursInput.value,
+    dateInput.value,
+    ratingInput.value
+  );
 
-  // If all validations pass, collect and log form data
-  if (inputsValid.every((isValid) => isValid)) {
-    const formData = collectData(
-      charityInput.value,
-      hoursInput.value,
-      dateInput.value,
-      ratingInput.value
-    );
-
-    console.log("Form Submitted Successfully:", formData);
     updateTable(formData);
     saveToLocalStorage(formData); 
     calculateTotalHours(); 
 
 // Clear the form inputs
-    form.reset();
+    event.target.reset();
   }
 }
 
@@ -66,7 +64,7 @@ function updateTable(formData) {
 
   // Add delete functionality to the button
   newRow.querySelector(".delete-btn").addEventListener("click", () => {
-    deleteRow(newRow, formData["Hours Volunteered"]);
+    deleteRow(newRow, formData);
   });
 
   tableBody.appendChild(newRow);
@@ -94,15 +92,17 @@ function loadFromLocalStorage() {
  /**
  * Deletes a row from the table and updates localStorage and the summary.
  * @param {HTMLElement} row - The row to delete.
- * @param {string} hours - The hours associated with the row.
+ * @param {object} logData - The data associated with the row.
  */
-function deleteRow(row, hours) {
-  const tableBody = document.querySelector("#volunteer-table tbody");
-  tableBody.removeChild(row);
+function deleteRow(row, logData) {
+  row.remove();
 
   const logs = JSON.parse(localStorage.getItem("volunteerLogs")) || [];
   const updatedLogs = logs.filter(
-    (log) => log["Hours Volunteered"] !== hours
+    (log) =>
+      log["Charity Name"] !== logData["Charity Name"] ||
+      log["Date Volunteered"] !== logData["Date Volunteered"] ||
+      log["Hours Volunteered"] !== logData["Hours Volunteered"]
   );
   localStorage.setItem("volunteerLogs", JSON.stringify(updatedLogs));
 
@@ -115,35 +115,36 @@ function deleteRow(row, hours) {
 function calculateTotalHours() {
   const logs = JSON.parse(localStorage.getItem("volunteerLogs")) || [];
   const totalHours = logs.reduce(
-    (sum, log) => sum + parseInt(log["Hours Volunteered"], 10),
+    (sum, log) => sum + parseFloat(log["Hours Volunteered"]),
     0
   );
 
   document.getElementById("total-hours").innerText = totalHours;
 }
 
-
 /**
  * Validates the Charity Name input.
  * @param {HTMLInputElement} charityInput - Input field for charity name.
- * @returns {Promise<boolean>} - True if valid, false otherwise.
+ * @returns {boolean} - True if valid, false otherwise.
  */
-async function validateCharityInput(charityInput) {
-  return validateInputField(charityInput, "*Charity Name cannot be blank");
+function validateCharityInput(charityInput) {
+  if (charityInput.value.trim() === "") {
+    showErrorMessage("charity-name-error");
+    return false;
+  }
+  return true;
 }
+
 
 /**
  * Validates the Hours Volunteered input.
  * Ensures value is a positive number.
  * @param {HTMLInputElement} hoursInput - Input field for hours volunteered.
- * @returns {Promise<boolean>} - True if valid, false otherwise.
+ * @returns {boolean} - True if valid, false otherwise.
  */
-async function validateHoursInput(hoursInput) {
-  if (hoursInput.value.trim() === "" || hoursInput.value <= 0) {
-    showInputError(
-      hoursInput,
-      "*Hours Volunteered must be greater than 0 and not blank"
-    );
+function validateHoursInput(hoursInput) {
+  if (hoursInput.value.trim() === "" || parseFloat(hoursInput.value) <= 0) {
+    showErrorMessage("hours-volunteered-error");
     return false;
   }
   return true;
@@ -152,61 +153,50 @@ async function validateHoursInput(hoursInput) {
 /**
  * Validates the Date input.
  * @param {HTMLInputElement} dateInput - Input field for date volunteered.
- * @returns {Promise<boolean>} - True if valid, false otherwise.
+ * @returns {boolean} - True if valid, false otherwise.
  */
-async function validateDateInput(dateInput) {
-  return validateInputField(dateInput, "*Date cannot be blank");
+function validateDateInput(dateInput) {
+  if (dateInput.value.trim() === "") {
+    showErrorMessage("date-volunteered-error");
+    return false;
+  }
+  return true;
 }
 
 /**
  * Validates the Experience Rating input.
  * Ensures the value is between 1 and 5.
  * @param {HTMLInputElement} ratingInput - Input field for experience rating.
- * @returns {Promise<boolean>} - True if valid, false otherwise.
+ * @returns {boolean} - True if valid, false otherwise.
  */
-async function validateRatingInput(ratingInput) {
-  const rating = Number(ratingInput.value);
-  if (ratingInput.value.trim() === "" || rating < 1 || rating > 5) {
-    showInputError(ratingInput, "*Rating must be between 1 and 5");
+function validateRatingInput(ratingInput) {
+  const rating = parseInt(ratingInput.value, 10);
+  if (
+    ratingInput.value.trim() === "" ||
+    isNaN(rating) ||
+    rating < 1 ||
+    rating > 5
+  ) {
+    showErrorMessage("experience-rating-error");
     return false;
   }
   return true;
 }
-
-/**
- * validation for input fields.
- * @param {HTMLInputElement} inputElement - The input field to validate.
- * @param {string} errorMessage - The error message to display if invalid.
- * @returns {Promise<boolean>} - True if valid, false otherwise.
- */
-async function validateInputField(inputElement, errorMessage) {
-  if (inputElement.value.trim() === "") {
-    showInputError(inputElement, errorMessage);
-    return false;
-  }
-  return true;
-}
-
 /**
  * Displays an error message for an invalid input field.
- * @param {HTMLInputElement} inputElement - The input field with an error.
- * @param {string} message - The error message to display.
+ * @param {string} errorId - The ID of the error message span element.
  */
-function showInputError(inputElement, message) {
-  const errorDisplay = document.createElement("span");
-  errorDisplay.innerText = message;
-  errorDisplay.className = "error-message";
-  errorDisplay.setAttribute("role", "alert");
-
-  inputElement.parentElement.appendChild(errorDisplay);
+function showErrorMessage(errorId) {
+  const errorElement = document.getElementById(errorId);
+  errorElement.style.display = "inline";
 }
 
 /**
  * Clears all existing error messages from the form.
  */
-async function clearErrorMessages() {
+function clearErrorMessages() {
   document.querySelectorAll(".error-message").forEach((element) => {
-    element.remove();
+    element.style.display = "none";
   });
 }
 
