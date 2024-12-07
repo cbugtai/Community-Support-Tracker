@@ -2,7 +2,19 @@
     padding: 20px;
     margin: auto;
     max-width: 1200px;
+}
 
+#header{
+    font-size: 15px;
+    padding: 10px;
+}
+#header h1{
+    font-weight: 500;
+}
+#footer{
+    font-size: 15px;
+    padding: 0px;
+    margin: 0px;
 }
 
 /* Form Container */
