@@ -136,7 +136,7 @@ describe("Volunteer Hours Tracker", () => {
     });
   });
 
-  describe("Table and Persistence Features", () => {
+  describe("Persistence Tests", () => {
     test("Saves data to localStorage", () => {
       const formData = {
         "Charity Name": "Charity A",
@@ -146,8 +146,10 @@ describe("Volunteer Hours Tracker", () => {
       };
 
       saveToLocalStorage(formData);
-      const logs = JSON.stringify([formData]);
-      expect(localStorage.setItem).toHaveBeenCalledWith("volunteerLogs", logs);
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        "volunteerLogs",
+        JSON.stringify([formData])
+      );
     });
 
     test("Loads data from localStorage and updates the table", () => {
@@ -159,6 +161,7 @@ describe("Volunteer Hours Tracker", () => {
           "Experience Rating": "4",
         },
       ];
+
       localStorage.getItem.mockReturnValueOnce(JSON.stringify(mockLogs));
       loadFromLocalStorage();
 
@@ -166,25 +169,9 @@ describe("Volunteer Hours Tracker", () => {
       expect(rows.length).toBe(1);
       expect(rows[0].children[0].textContent).toBe("Charity A");
     });
+  });
 
-    test("Deletes a row and updates localStorage", () => {
-      const formData = {
-        "Charity Name": "Charity A",
-        "Hours Volunteered": "5",
-        "Date Volunteered": "2024-12-02",
-        "Experience Rating": "4",
-      };
-
-      updateTable(formData);
-      saveToLocalStorage(formData);
-
-      const row = document.querySelector("#volunteer-table tbody tr");
-      deleteRow(row, "5");
-
-      expect(document.querySelectorAll("#volunteer-table tbody tr").length).toBe(0);
-      expect(localStorage.setItem).toHaveBeenCalledWith("volunteerLogs", JSON.stringify([]));
-    });
-
+  describe("Summary and Deletion Tests", () => {
     test("Calculates total hours correctly", () => {
       const mockLogs = [
         { "Hours Volunteered": "5" },
@@ -211,6 +198,24 @@ describe("Volunteer Hours Tracker", () => {
       row.querySelector(".delete-btn").click();
 
       expect(totalHoursElement.textContent).toBe("10");
+    });
+
+    test("Deletes a row and updates localStorage", () => {
+      const formData = {
+        "Charity Name": "Charity A",
+        "Hours Volunteered": "5",
+        "Date Volunteered": "2024-12-02",
+        "Experience Rating": "4",
+      };
+
+      updateTable(formData);
+      saveToLocalStorage(formData);
+
+      const row = document.querySelector("#volunteer-table tbody tr");
+      deleteRow(row, formData);
+
+      expect(document.querySelectorAll("#volunteer-table tbody tr").length).toBe(0);
+      expect(localStorage.setItem).toHaveBeenCalledWith("volunteerLogs", JSON.stringify([]));
     });
   });
 });
