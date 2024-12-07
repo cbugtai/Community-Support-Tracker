@@ -41,7 +41,7 @@ async function onSubmit(event) {
     console.log("Form Submitted Successfully:", formData);
     updateTable(formData);
     saveToLocalStorage(formData); 
-    updateTotalHours(); 
+    calculateTotalHours(); 
 
 // Clear the form inputs
     form.reset();
@@ -88,7 +88,7 @@ function saveToLocalStorage(data) {
 function loadFromLocalStorage() {
   const logs = JSON.parse(localStorage.getItem("volunteerLogs")) || [];
   logs.forEach((log) => updateTable(log));
-  updateTotalHours();
+  calculateTotalHours();
 }
 
  /**
@@ -106,13 +106,13 @@ function deleteRow(row, hours) {
   );
   localStorage.setItem("volunteerLogs", JSON.stringify(updatedLogs));
 
-  updateTotalHours();
+  calculateTotalHours();
 }
 
 /**
  * Updates the total hours summary based on table data.
  */
-function updateTotalHours() {
+function calculateTotalHours() {
   const logs = JSON.parse(localStorage.getItem("volunteerLogs")) || [];
   const totalHours = logs.reduce(
     (sum, log) => sum + parseInt(log["Hours Volunteered"], 10),
@@ -243,7 +243,6 @@ if (typeof window !== "undefined") {
     saveToLocalStorage,
     loadFromLocalStorage,
     deleteRow,
-  calculateTotalHours,
-  calculateTotalHours,
+    calculateTotalHours
   };
 }

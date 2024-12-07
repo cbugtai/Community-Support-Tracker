@@ -13,7 +13,21 @@ const {
   calculateTotalHours,
 } = require("./VolunteerHoursScript");
 
-describe("Form Submission Tests", () => {
+class localStorageMock{
+  constructor(){
+      this.store = {}
+  }
+  getItem(key){
+      return this.store[key]  || null;
+  }
+  setItem(key, value){
+      this.store[key] = String(value);
+  }
+}
+global.localStorage = new localStorageMock;
+
+
+describe("Volunteer Hours Tracker", () => {
   let dom;
   let document;
 
@@ -46,11 +60,18 @@ describe("Form Submission Tests", () => {
     document = dom.window.document;
     global.document = document;
     global.localStorage = {
-      getItem: jest.fn(),
-      setItem: jest.fn(),
+      store: {},
+      getItem: jest.fn((key) => {
+        return this.store[key] || null;
+      }),
+      setItem: jest.fn((key, value) => {
+        this.store[key] = value;
+      }),
+      clear: jest.fn(() => {
+        this.store = {};
+      }),
     };
   });
-
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -135,24 +156,8 @@ describe("Form Submission Tests", () => {
       expect(await validateRatingInput(ratingInput)).toBe(true);
     });
   });
-  describe("Table and Persistence Features", () => {
-    test("Updates table with new row", () => {
-      const formData = {
-        "Charity Name": "Charity A",
-        "Hours Volunteered": "5",
-        "Date Volunteered": "2024-12-02",
-        "Experience Rating": "4",
-      };
 
-      updateTable(formData);
-
-      const rows = document.querySelectorAll("#volunteer-table tbody tr");
-
-      expect(rows.length).toBe(1);
-      expect(rows[0].children[0].textContent).toBe("Charity A");
-      expect(rows[0].children[1].textContent).toBe("5");
-    });
-
+  describe("Persistence Tests", () => {
     test("Saves data to localStorage", () => {
       const formData = {
         "Charity Name": "Charity A",
@@ -161,7 +166,7 @@ describe("Form Submission Tests", () => {
         "Experience Rating": "4",
       };
 
-      saveToLocalStorage([formData]);
+      saveToLocalStorage(formData);
       expect(localStorage.setItem).toHaveBeenCalledWith(
         "volunteerLogs",
         JSON.stringify([formData])
@@ -185,25 +190,9 @@ describe("Form Submission Tests", () => {
       expect(rows.length).toBe(1);
       expect(rows[0].children[0].textContent).toBe("Charity A");
     });
+  });
 
-    test("Deletes a row and updates localStorage", () => {
-      const formData = {
-        "Charity Name": "Charity A",
-        "Hours Volunteered": "5",
-        "Date Volunteered": "2024-12-02",
-        "Experience Rating": "4",
-      };
-
-      updateTable(formData);
-      saveToLocalStorage([formData]);
-
-      const row = document.querySelector("#volunteer-table tbody tr");
-      deleteRow(row, "5");
-
-      expect(document.querySelectorAll("#volunteer-table tbody tr").length).toBe(0);
-      expect(localStorage.setItem).toHaveBeenCalledWith("volunteerLogs", JSON.stringify([]));
-    });
-
+  describe("Summary and Deletion Tests", () => {
     test("Calculates total hours correctly", () => {
       const mockLogs = [
         { "Hours Volunteered": "5" },
@@ -231,7 +220,23 @@ describe("Form Submission Tests", () => {
 
       expect(totalHoursElement.textContent).toBe("10");
     });
+
+    test("Deletes a row and updates localStorage", () => {
+      const formData = {
+        "Charity Name": "Charity A",
+        "Hours Volunteered": "5",
+        "Date Volunteered": "2024-12-02",
+        "Experience Rating": "4",
+      };
+
+      updateTable(formData);
+      saveToLocalStorage(formData);
+
+      const row = document.querySelector("#volunteer-table tbody tr");
+      deleteRow(row, formData);
+
+      expect(document.querySelectorAll("#volunteer-table tbody tr").length).toBe(0);
+      expect(localStorage.setItem).toHaveBeenCalledWith("volunteerLogs", JSON.stringify([]));
+    });
   });
 });
-
-  
