@@ -13,29 +13,18 @@ const {
   calculateTotalHours,
 } = require("./VolunteerHoursScript");
 
-class LocalStorageMock {
-  constructor() {
-    this.store = {};
+class localStorageMock{
+  constructor(){
+      this.store = {}
   }
-
-  getItem(key) {
-    return this.store[key] || null;
+  getItem(key){
+      return this.store[key]  || null;
   }
-
-  setItem(key, value) {
-    this.store[key] = String(value);
-  }
-
-  clear() {
-    this.store = {};
-  }
-
-  removeItem(key) {
-    delete this.store[key];
+  setItem(key, value){
+      this.store[key] = String(value);
   }
 }
-
-global.localStorage = new LocalStorageMock();
+global.localStorage = new localStorageMock;
 
 
 describe("Volunteer Hours Tracker", () => {
