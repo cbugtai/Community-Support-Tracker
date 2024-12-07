@@ -15,7 +15,7 @@ body {
     color: var(--text-color);
     background-color: var(--background-color);
     line-height: 1.6;
-    margin: 20px;
+    
 }
 
 h1, h2, h3 {
@@ -35,7 +35,9 @@ h2 {
 h3 {
     font-size: 1.5rem;
 }
-
+.header2{
+    margin: 20px;
+}
 /* Layout and Styling */
 .section {
     background-color: #ffffff;
