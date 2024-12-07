@@ -1,4 +1,7 @@
 function init(){
+    //Shows donation history (if any)
+    showHistory();
+
     // Submit Event
     const form = document.getElementById("donation-form");
     form.addEventListener("submit", onSubmit);
@@ -21,7 +24,10 @@ async function onSubmit(event){
 
     //Checks if all validations return true
     if (nameValid && amountValid && dateValid){
-        collectData(nameInput.value, amountInput.value, dateInput.value, messageInput.value)
+        let formData = collectData(nameInput.value, amountInput.value, dateInput.value, messageInput.value);
+        await saveDonationHistory(formData);
+        // Show donation history
+        showHistory()
     }
 }
 
@@ -91,6 +97,7 @@ async function validateDateInput(dateInput){
             isDateValid = false
         }
     }
+
     return isDateValid
 }
 
@@ -126,11 +133,134 @@ function collectData(name, amount, date, message = ""){
     return formData;
 }
 
-// Exports the module snecessary when running tests
+// either creates an empy donationHistory array or gets the donationHistory from localStorage 
+async function getDonationHistory(){
+    if (localStorage.getItem("DONATIONHISTORY") === null){
+        return [];
+    } else {
+        return JSON.parse(localStorage.getItem("DONATIONHISTORY"))
+    }
+}
+
+// saves formData object to an array of formData objects called donationHistory
+// then saves donationHistory to local storage un the name "DONATIONHISTORY"
+async function saveDonationHistory(formData){
+    let donationHistory = await getDonationHistory();
+    
+    donationHistory.unshift(formData)
+
+    localStorage.setItem("DONATIONHISTORY", JSON.stringify(donationHistory));
+}
+
+// adds all data in storage to a table
+async function showHistory(){
+    //This is a trashcan svg i got from chatGPT
+    const svgString = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="5 5 80 80" width="50" height="50">
+                    <rect x="25" y="30" width="50" height="50" fill="#808080" stroke="#666" stroke-width="2" rx="5" ry="5"/>
+                    <rect x="20" y="20" width="60" height="10" fill="#666" stroke="#555" stroke-width="2" rx="3" ry="3"/>
+                    <rect x="40" y="15" width="20" height="5" fill="#444" stroke="#333" stroke-width="2" rx="2" ry="2"/>
+                    <line x1="35" y1="35" x2="35" y2="75" stroke="#555" stroke-width="2"/>
+                    <line x1="50" y1="35" x2="50" y2="75" stroke="#555" stroke-width="2"/>
+                    <line x1="65" y1="35" x2="65" y2="75" stroke="#555" stroke-width="2"/>
+                    </svg>
+                    `;
+
+    let donationHistory = await getDonationHistory();
+    if (donationHistory.length > 0) {
+        //creating the table
+        const table = document.createElement("table")
+        table.id = "donation-history"
+        table.className = "table"
+        //Adding Headers
+        let header = table.createTHead();
+        let headerRow = header.insertRow(0);
+        // header columns
+        let dateHeader = headerRow.insertCell(0);
+        let nameHeader = headerRow.insertCell(1);
+        let amountHeader = headerRow.insertCell(2);
+        let messageHeader = headerRow.insertCell(3);
+        let deleteHeader = headerRow.insertCell(4);
+        // header text
+        dateHeader.innerHTML = "Date"
+        nameHeader.innerHTML = "Charity Name"
+        amountHeader.innerHTML = "Donation Amount"
+        messageHeader.innerHTML = "Donor Message"
+        deleteHeader.innerHTML =  svgString
+        // body contents
+        for (let i = 0; i < donationHistory.length; i++) {
+            let body = table.createTBody();
+            let bodyRow = body.insertRow(0);
+
+            let dateBody = bodyRow.insertCell(0);
+            let nameBody = bodyRow.insertCell(1);
+            let amountBody = bodyRow.insertCell(2);
+            let messageBody = bodyRow.insertCell(3);
+            let deleteBody = bodyRow.insertCell(4)
+
+            dateBody.innerHTML = donationHistory[i]["Donation Date"]
+            nameBody.innerHTML = donationHistory[i]["Charity Name"]
+            amountBody.innerHTML = Intl.NumberFormat('en-US',
+                                        {
+                                            style: 'currency',
+                                            currency: 'USD'
+                                        }
+                                    ).format(donationHistory[i]["Donation Amount"])
+            if (donationHistory[i]["Donation Message"] == ""){
+                messageBody.innerHTML = donationHistory[i]["Donation Message"]
+            } else {
+                messageBody.innerHTML = (`"${donationHistory[i]["Donation Message"]}"`)
+            }
+            deleteBody.innerHTML = `<button value=${i} onclick="deleteRow(this.value)">Delete</button>`
+        }
+        
+        document.getElementById("donation-history").replaceWith(table)
+    } else {
+        const tableEmpty = document.createElement("table")
+        tableEmpty.id = "donation-history"
+        document.getElementById("donation-history").replaceWith(tableEmpty)
+    }
+    //Summary
+    showSummary()
+}
+
+
+// deletes this row of data from local storage
+async function deleteRow(index){
+    let text = `Are you sure you want to delete this donation?`
+
+    if (confirm(text) == true){
+        let donationHistory = await getDonationHistory();
+
+        donationHistory.splice(index, 1)
+        localStorage.setItem("DONATIONHISTORY", JSON.stringify(donationHistory));
+        showHistory()
+    } 
+}
+
+// shows the total amount donated
+async function showSummary(){
+    let donationHistory = await getDonationHistory();
+    donationSummary = 0
+    for (let i = 0; i < donationHistory.length; i++) {
+        donationSummary = donationSummary + Number(donationHistory[i]["Donation Amount"])
+    }
+    donationSummaryFormatted = Intl.NumberFormat('en-US',
+                                    {
+                                        style: 'currency',
+                                        currency: 'USD'
+                                    }
+                                ).format(donationSummary)
+    const summary = document.getElementById("donation-summary");
+    summary.innerHTML = `Total Amount Donated: ${donationSummaryFormatted}`
+}
+
+// Exports the modules necessary when running tests
 if (typeof window !== "undefined"){
     window.onload = init;
 } else {
-    module.exports = { init, collectData, validateNameInput, validateAmountInput, validateDateInput, showInputError }
+    module.exports = { init, collectData, validateNameInput, validateAmountInput, validateDateInput, showInputError, 
+                        saveDonationHistory, getDonationHistory, showHistory, showSummary, deleteRow }
 }
 
 

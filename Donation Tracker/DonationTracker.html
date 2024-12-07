@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Donation Tracker</title>
     <link rel="stylesheet" href="../styles.css" />
-    <link rel="stylesheet" href="./DonationTracker.css">
+    <link rel="stylesheet" href="DonationTracker.css">
   </head>
   <body>
-    <header id="header">Community Support Tracker</header>
+    <header id="header">Donation Tracker Page</header>
 
     <nav id="navbar">
-      <a href="Donation Tracker\DonationTracker.html">Donation Tracker</a>
-      <a href="Volunteer Hours\VolunteerHours.html">Volunteer Hours Tracker</a>
-      <a href="Event Signup\EventSignup.html">Event Signup</a>
+      <a href="../index.html">Homepage</a>
+      <a href="../Volunteer Hours/VolunteerHours.html">Volunteer Hours Tracker</a>
+      <a href="../Event Signup/EventSignup.html">Event Signup</a>
     </nav>
 
-    <section class="content">
+    <section id="content">
         <form id="donation-form">
             <div id="charity-name">
             <label for="Charity Name">Charity Name:</label>
@@ -41,9 +41,14 @@
             <input type="submit" value="Submit" id="submit">
             
         </form>
+
+        <h1 id="donation-summary"></h1>
+
+        <table id="donation-history">
+        </table>
     </section>
 
-    <footer id="footer">Footer</footer>
-    <script src="bundle.js"></script>
+    <footer id="footer">&copy; 2024 PiXELL River Financial</footer>
+    <script src="DonationTrackerScript.js"></script>
   </body>
 </html>

@@ -1,0 +1,50 @@
+/* Styling taken from ChatGPT */ 
+/* Color Palette */
+:root {
+    --primary-color: #4A90E2;
+    --secondary-color: #50E3C2;
+    --accent-color: #F5A623;
+    --background-color: #F5F5F5;
+    --text-color: #333333;
+}
+
+/* Typography */
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    line-height: 1.6;
+    
+}
+
+h1, h2, h3 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--primary-color);
+    margin-top: 0;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.75rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+.header2{
+    margin: 20px;
+}
+/* Layout and Styling */
+.section {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid var(--secondary-color);
+    margin: 20px;
+}
